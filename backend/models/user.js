@@ -3,6 +3,10 @@ const bcrypt = require('bcryptjs');
 
 const userSchema = mongoose.Schema(
   {
+    ID:{
+      type:Number,
+      required:true
+    },
     name: {
       type: String,
       required: true,
@@ -16,10 +20,10 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    role: {
-      type: Boolean,
+    role: {             // role - 0:students ; 1:teachers
+      type: Number,
       required: true,
-      default: false,
+      default: 0,
     },
     batch:{
         type:String,
@@ -31,12 +35,12 @@ const userSchema = mongoose.Schema(
   }
 );
 
-// decrpyt 
+// decrpyt password
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// will encrypt password everytime its saved
+// will encrypt password before saving
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     next();

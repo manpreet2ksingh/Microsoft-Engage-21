@@ -1,9 +1,8 @@
-const user = require('../models/user');
 const User = require('../models/user');
 const generateToken = require('../utils/generateToken');
 
 const registerUser = async (req,res)=>{
-    const {name, email, password, batch} = req.body;
+    const {name, email, password, batch, ID,role} = req.body;
 
     const userExistance = await User.findOne({email})
 
@@ -14,11 +13,25 @@ const registerUser = async (req,res)=>{
         })
     }
 
+    // check if student or teacher with entered ID exists or not
+    // if exists - raise error
+
+    const userIDExistance = await User.findOne({ID});
+
+    if(userIDExistance && role == userIDExistance.role)
+    {
+        return res.status(400).json({
+            error:"ID already in use"
+        })
+    }
+
     const user = await User.create({
+        ID,
         name,
         email,
         password,
-        batch
+        batch,
+        role
     })
 
     if(user)

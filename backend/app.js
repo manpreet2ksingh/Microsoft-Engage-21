@@ -4,6 +4,7 @@ const app = express();
 const mongoose = require('mongoose');
 
 const authRoutes = require('./routes/authRoutes')
+const timeTableRoutes = require('./routes/timeTableRoutes')
 
 const PORT = process.env.PORT || 8000
 
@@ -19,6 +20,7 @@ mongoose.connect(
 app.use(express.json())
 
 app.use('/api/users',authRoutes);
+app.use('/api/timetable',timeTableRoutes);
 
 app.listen(PORT,()=>{
     console.log(`Server is up and running on PORT ${PORT}`);
