@@ -1,7 +1,10 @@
-const LoginScreen = ()=>{
+import React from 'react'
+import Layout from './Layout'
+
+const LoginScreen = (props)=>{
     return (
         <div>
-            Login
+            <Layout loginas={props.location.state.account}/>
         </div>
     )
 }
