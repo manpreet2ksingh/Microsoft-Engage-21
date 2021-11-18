@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import "./styles.css";
 
 const LandingPage = () => {
+
 	return (
 		<div className='main'>
 			<Container>
