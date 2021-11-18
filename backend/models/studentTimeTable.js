@@ -17,6 +17,9 @@ const TimeTableSchema = mongoose.Schema({
                 },
                 teacherID:{
                     type:Number
+                },
+                teacherName:{
+                    type:String
                 }
             }
         ]

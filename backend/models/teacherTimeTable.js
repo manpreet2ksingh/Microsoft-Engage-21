@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const TeacherTimeTableSchema = mongoose.Schema({
     teacherID:{
+        type:Number,
+        required:true
+    },
+    teacherName:{
         type:String,
         required:true
     },

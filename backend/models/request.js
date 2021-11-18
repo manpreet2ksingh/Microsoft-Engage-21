@@ -5,6 +5,9 @@ const requestSchema = mongoose.Schema(
     email:{
         type:String,
     },
+    day:{
+        type:String
+    },
     status:{
         type:Boolean,
         default:false

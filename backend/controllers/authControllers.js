@@ -60,10 +60,11 @@ const authenticateUser = async (req,res)=>{
     if(user && (await user.matchPassword(password)))
     {
         return res.status(201).json({
-            _id:user._id,
+            ID:user.ID,
             name:user.name,
             email:user.email,
             batch:user.batch,
+            role:user.role,
             token:generateToken(user._id)
         })
     }

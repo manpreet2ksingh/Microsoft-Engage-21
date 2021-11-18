@@ -25,9 +25,16 @@ const userSchema = mongoose.Schema(
       required: true,
       default: 0,
     },
-    batch:{
+    batch:{               // for students
+        type:String
+    },
+    vaccinationStatus:{
         type:String,
-        required: true
+        required:true,
+        default:"Not vaccinated"
+    },
+    vaccinationCertificate:{
+        type:String // for time-being
     }
   },
   {

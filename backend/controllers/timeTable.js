@@ -23,4 +23,18 @@ const addTimeTable = async (req,res)=>{
     
 }
 
-module.exports = {addTimeTable};
+const timetable = async (req,res)=>{
+    const tt = await TimeTable.findOne({batch:req.params.batch});
+    if(tt)
+    {
+        return res.json(tt)
+    }
+    else
+    {
+        return res.status(404).json({
+            error:"Something went wrong"
+        })
+    }
+}
+
+module.exports = {addTimeTable,timetable};

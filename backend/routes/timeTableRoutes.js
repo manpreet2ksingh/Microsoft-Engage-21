@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const {addTimeTable} = require('../controllers/timeTable')
+const {addTimeTable,timetable} = require('../controllers/timeTable')
 
 router.post('/add',addTimeTable);
+router.get('/get/:batch',timetable);
 
 module.exports = router;
