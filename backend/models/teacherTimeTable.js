@@ -5,10 +5,6 @@ const TeacherTimeTableSchema = mongoose.Schema({
         type:Number,
         required:true
     },
-    teacherName:{
-        type:String,
-        required:true
-    },
     timetable:[
         [
             {
@@ -30,7 +26,7 @@ const TeacherTimeTableSchema = mongoose.Schema({
     }
 );
 
-module.exports = mongoose.model("TeachersTimeTable", TeacherTimeTableSchema);
+module.exports = mongoose.model("TeacherTimeTable", TeacherTimeTableSchema);
 
 
 
