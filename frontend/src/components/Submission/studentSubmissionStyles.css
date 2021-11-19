@@ -20,6 +20,11 @@
 	color: #0c0847;
 }
 
+#container h6{
+	color: white;
+	margin-left: 120px;
+}
+
 .course {
 	background-color: #fff;
 	border-radius: 10px;
@@ -94,7 +99,7 @@
 	
 }
 
-.btn {
+.submitButton {
 	background-color: #2A265F;
 	border: 0;
 	border-radius: 50px;
@@ -106,15 +111,12 @@
 	right: 30px;
 	letter-spacing: 1px;
 	margin:15px;
+	margin-left: 150px; 
 }
 
 
 @media screen and (max-width: 480px) {
 
-	.social-panel-container.visible {
-		transform: translateX(0px);
-	}
-	
 	.floating-btn {
 		right: 10px;
 	}

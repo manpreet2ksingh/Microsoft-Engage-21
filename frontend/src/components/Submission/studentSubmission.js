@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {Alert} from 'react-bootstrap'
 import Header from "../Navbar/Navbar";
-import './studentStyles.css'
+import './studentSubmissionStyles.css'
 
 import {submitStudentResponse,updateStudentResponse,TimeTable} from '../API/api'
 import Template from "./Template";
@@ -20,6 +20,13 @@ const StudentPreference = ()=>{
     map[9] = "16:00 - 17:00"
 
     var day = new Date().getDay();  //return as Sunday-0,Monday-1,Tuesday-2,Wednesday-3,Thursday-4,Friday-5,Saturday-6
+    day = 4;
+
+    var today = new Date();
+    const currentTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    // console.log(currentTime)
+
+    const deadlineToSubmitPreference = "18:00:00";  // i.e. 6pm
 
     const [schedule,setSchedule] = useState([])
     const [preferences,setPreferences] = useState([]);
@@ -153,14 +160,21 @@ const StudentPreference = ()=>{
         }
         
     }
-    
-    const weekday = ()=>(
-        <div id="container-body">
-            <div id="container">
-                <h2>
-                    {previouslySubmittedPreferences?"Update":"Submit"} your preferences for tomorrow's lectures
-                </h2>
-            </div>
+
+    const deadlinePassed = ()=>{
+
+        // if preferences are submitted => remove them from local storage
+        previouslySubmittedPreferences && localStorage.removeItem('preferences');
+
+        return (
+            <Alert  className="d-flex justify-content-center" variant="danger">
+                        Deadline passed.
+            </Alert>
+        )
+    }
+
+    const showLectures = ()=>(
+        <div>
             {
                 schedule && 
                 schedule.map((lecture,i)=>(
@@ -171,15 +185,28 @@ const StudentPreference = ()=>{
                               key={i}/>
                 ))
             }
-            <div>
+            <div className="btn-box">
                 {
                     /* if preference already submitted, then it can only be updated */
                     localStorage.getItem('preferences')?
-                    <button className="btn" onClick={updatePreferences}>Update preference</button>:
-                    <button className="btn" onClick={submitPreferences}>Submit preference</button>
+                    <button className="submitButton" onClick={updatePreferences}>Update preferences</button>:
+                    <button className="submitButton" onClick={submitPreferences}>Submit preferences</button>
                 }
-    
             </div>
+        </div>
+    )
+    
+    const weekday = ()=>(
+        <div id="container-body">
+            <div id="container">
+                <h2>
+                    {previouslySubmittedPreferences?"Update":"Submit"} your preferences for tomorrow's lectures
+                </h2>
+                <h6>Deadline to submit/update preferences - 6 PM</h6>
+            </div>
+            {
+                (currentTime > deadlineToSubmitPreference)?deadlinePassed():showLectures()
+            }
         </div>
     )
 

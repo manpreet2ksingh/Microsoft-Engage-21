@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import './studentStyles.css'
+import './studentSubmissionStyles.css'
 
 const Template = ({lecture,map,collectPreferences,check,index})=>{
 
