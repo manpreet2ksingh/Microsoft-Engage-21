@@ -3,7 +3,7 @@ import {Alert} from 'react-bootstrap'
 import Header from "../Navbar/Navbar";
 import './studentStyles.css'
 
-import {submitStudentResponse,TimeTable} from '../API/api'
+import {submitStudentResponse,updateStudentResponse,TimeTable} from '../API/api'
 import Template from "./Template";
 
 const StudentPreference = ()=>{
@@ -19,12 +19,19 @@ const StudentPreference = ()=>{
     map[8] = "15:00 - 16:00"
     map[9] = "16:00 - 17:00"
 
-    const day = new Date().getDay();
+    var day = new Date().getDay();  //return as Sunday-0,Monday-1,Tuesday-2,Wednesday-3,Thursday-4,Friday-5,Saturday-6
 
     const [schedule,setSchedule] = useState([])
     const [preferences,setPreferences] = useState([]);
     const [response,setResponse] = useState("")
     const {batch,ID,name} = JSON.parse(localStorage.getItem('userInfo')); /* parsing string to JSON to extract user data */
+    
+    var previouslySubmittedPreferences = (localStorage.getItem('preferences'))?
+                                          localStorage.getItem('preferences').split(','):null;
+    
+    const [check,setCheck] = useState(previouslySubmittedPreferences)
+
+    /* check variable role - to validate whether preferences are submitted or not*/
 
     /*fetching timetable */
     const getSchedule = async ()=>{
@@ -39,11 +46,23 @@ const StudentPreference = ()=>{
             }
         })
     }
-
-    const collectPreferences = (mode)=>{
-        var temp = preferences;
-        temp.push(mode);
-        setPreferences(temp);
+    /*Collecting preferences for next day */
+    const collectPreferences = (mode,index)=>{
+        /* if its an update case (check != null), setPreferences without changing the previous submitted
+        preferences in localStorage to avoid unnecessary API update calls*/
+        if(check)       
+        {
+            var temp = check;
+            temp[index] = mode;
+            // console.log(check);
+            setCheck(temp);
+            setPreferences(check);
+        }
+        else{
+            var temp = preferences;
+            temp.push(mode);
+            setPreferences(temp);
+        }
         setResponse("")
     }
 
@@ -51,23 +70,31 @@ const StudentPreference = ()=>{
         getSchedule();
     },[])
 
-    const weekend = ()=>(
-        <div>
-            <h2>Tomorrow's a Holiday</h2>
-            <h2>Enjoy</h2>
-        </div>
-    )
+    const weekend = ()=>{
+        return <Alert  className="d-flex justify-content-center" variant="success" style={{ marginTop:"50px"}}>
+                    <Alert.Heading>
+                        Tomorrow's a holiday. Enjoy!
+                    </Alert.Heading>
+                </Alert>
+    }
 
-    const submitPreference = async ()=>{
+    const submitPreferences = async ()=>{
         console.log(batch,ID,name)
         const studentID = ID;
         const studentName = name;
         var lecturesCount = schedule.length;
-
+        console.log(preferences)
         for(var j=0;j<lecturesCount;j++){
+            if(preferences[j]===undefined)
+            {
+                setResponse("Filling each preference is Mandatory");
+                return;
+            }
+        }
+
+        for(j=0;j<lecturesCount;j++){
             const time = schedule[j].time;
             const preference = preferences[j];
-            console.log(time,preference)
             await submitStudentResponse({batch,time,preference,studentID,studentName})
             .then((res)=>{
                 if(res.error){
@@ -79,40 +106,80 @@ const StudentPreference = ()=>{
                 }
             })
         }
+        localStorage.setItem('preferences',preferences);
         setResponse("Response collected");
+    }
+
+    const updatePreferences = async ()=>{
+        const studentID = ID;
+        const studentName = name;
+        var lecturesCount = schedule.length;
+        // console.log(preferences)
+        
+        for(var j=0;j<lecturesCount;j++){
+            const time = schedule[j].time;
+            const preference = preferences[j];
+            if(preferences[j]===previouslySubmittedPreferences[j])    // no update ; if new & prev is the same
+            {
+                continue;
+            }
+            await updateStudentResponse({batch,time,preference,studentID,studentName})
+            .then((res)=>{
+                if(res.error){
+                    setResponse(res.error);
+                    return;
+                }
+                else{
+                    console.log(res);
+                }
+            })
+        }
+        localStorage.setItem('preferences',preferences);
+        setResponse("Response updated");
     }
 
     const displayResponse=()=>{
         // console.log(response);
-        if(response === 'Response collected')
+        if(response === 'Response collected' || response === 'Response updated')
         {
             return <Alert  className="d-flex justify-content-center" variant="success">
-                        Response has been collected
+                        {response}
                     </Alert>
         }
-        else if(response!=""){
+        else if(response!==""){
             return <Alert  className="d-flex justify-content-center" variant="danger">
-                        Error collecting response
+                        {response}
                     </Alert>
         }
         
     }
     
     const weekday = ()=>(
-        <div className="container-body">
-            <div className="heading">
+        <div id="container-body">
+            <div id="container">
                 <h2>
-                    Submit your preferences for tomorrow's lectures
+                    {previouslySubmittedPreferences?"Update":"Submit"} your preferences for tomorrow's lectures
                 </h2>
             </div>
             {
                 schedule && 
                 schedule.map((lecture,i)=>(
-                    <Template lecture={lecture} map={map} 
-                                collectPreferences={collectPreferences} key={i}/>
+                    <Template lecture={lecture} 
+                              map={map} 
+                              collectPreferences={collectPreferences} 
+                              check={check} index={i}
+                              key={i}/>
                 ))
             }
-            <button className="btn" onClick={submitPreference}>Submit preference</button>
+            <div>
+                {
+                    /* if preference already submitted, then it can only be updated */
+                    localStorage.getItem('preferences')?
+                    <button className="btn" onClick={updatePreferences}>Update preference</button>:
+                    <button className="btn" onClick={submitPreferences}>Submit preference</button>
+                }
+    
+            </div>
         </div>
     )
 
@@ -121,7 +188,7 @@ const StudentPreference = ()=>{
             <Header /> 
              {displayResponse()}
             {
-                (day === 5 || day === 5)?weekend():weekday()
+                (day === 5 || day === 6)?weekend():weekday()
             }
         </div>
     )

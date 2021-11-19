@@ -18,6 +18,7 @@ exports.getStudentByID = async (req,res,next,id)=>{
 }
 
 exports.saveResponse = async (req,res)=>{
+    
     const {batch,time,preference,studentID,studentName} = req.body;
 
     const save = await StudentResponse.create({
@@ -40,5 +41,29 @@ exports.saveResponse = async (req,res)=>{
             error:"Something went wrong"
         })
     }
+}
 
+exports.updateResponse = async (req,res)=>{
+    const {batch,time,preference,studentID,studentName} = req.body;
+
+    const response = await StudentResponse.updateOne({
+        batch,
+        time,
+        studentID,
+        studentName
+    },{
+        $set:{
+            "preference":preference,
+        }
+    })
+
+    if(response.modifiedCount > 0)
+    {
+        return res.status(201).json({
+            result:"Response updated"
+        })
+    }
+    return res.status(400).json({
+        error:"Submit your response first"
+    })
 }

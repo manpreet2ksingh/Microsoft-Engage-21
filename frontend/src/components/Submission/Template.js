@@ -1,26 +1,28 @@
 import React,{useState} from 'react'
 import './studentStyles.css'
 
-const Template = ({lecture,map,collectPreferences,index})=>{
+const Template = ({lecture,map,collectPreferences,check,index})=>{
 
     const {time,subject} = lecture;
-    const [preference,setPreference] = useState("");
+    const previousValue = (check)?check[index]:"";
+    const [preference,setPreference] = useState(previousValue);
     
     const handleChange = (e)=>{
         setPreference(e.target.value)
-        collectPreferences(e.target.value)
+        collectPreferences(e.target.value,index)
     }
 
     const displayLectureDetails = ()=>(
         <div className="course">
             <div className="course-preview">
-                <h6>{map[time]}</h6>
                 <h2>{subject}</h2>
             </div>
             <div className="course-info">
-                <h2> GREG</h2>
+                <h6>{map[time]}</h6>
+                <h2>Teacher: Greg</h2>
+                <label>Preference: </label>
                 <select name="preference" value={preference}
-                        onChange={handleChange}>
+                        onChange={handleChange} required>
                     <option>select</option>
                     <option value="Offline">Offline</option>
                     <option value="Online">Online</option>

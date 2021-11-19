@@ -84,7 +84,7 @@ exports.responseToTeacher = async (req,res)=>{
     const data = await StudentResponse.find({batch,
         time,
         preference:"Offline",
-        createdAt:{$gte:date,$lt:nextDate}}).sort({createdAt:1});
+        updatedAt:{$gte:date,$lt:nextDate}}).sort({createdAt:1});
 
     var temp = preferredClassStrength;
     var ret = [];

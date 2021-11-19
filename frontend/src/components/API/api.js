@@ -37,3 +37,17 @@ export const submitStudentResponse = async (data)=>{
         return res.json()
     })
 }
+
+export const updateStudentResponse = async (data)=>{
+    return await fetch(`http://localhost:8000/api/student/${data.studentID}/updateResponse`,{
+        method:'POST',
+        headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res=>{
+        return res.json()
+    })
+}

@@ -16,7 +16,7 @@ exports.analysis = async (req,res)=>{
     const data = await StudentResponse.find({batch,
                                             time,
                                             teacherID,
-                                            createdAt:{$gte:date,$lt:nextDate}});
+                                            updatedAt:{$gte:date,$lt:nextDate}});
 
     var offline=0,online=0,absentees=0;
 
