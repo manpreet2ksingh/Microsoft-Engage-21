@@ -1,9 +1,9 @@
 import React,{useState} from 'react'
-import './studentSubmissionStyles.css'
+import './styles.css'
 
 const Template = ({lecture,map,collectPreferences,check,index})=>{
 
-    const {time,subject} = lecture;
+    const {time,subject,teacherName} = lecture;
     const previousValue = (check)?check[index]:"";
     const [preference,setPreference] = useState(previousValue);
     
@@ -15,11 +15,11 @@ const Template = ({lecture,map,collectPreferences,check,index})=>{
     const displayLectureDetails = ()=>(
         <div className="course">
             <div className="course-preview">
-                <h2>{subject}</h2>
+                <h2>{subject.toUpperCase()}</h2>
             </div>
             <div className="course-info">
                 <h6>{map[time]}</h6>
-                <h2>Teacher: Greg</h2>
+                <h2>Teacher: {teacherName}</h2>
                 <label>Preference: </label>
                 <select name="preference" value={preference}
                         onChange={handleChange} required>

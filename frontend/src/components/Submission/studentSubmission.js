@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {Alert} from 'react-bootstrap'
 import Header from "../Navbar/Navbar";
-import './studentSubmissionStyles.css'
+import './styles.css'
 
 import {submitStudentResponse,updateStudentResponse,TimeTable} from '../API/api'
 import Template from "./Template";
@@ -20,7 +20,8 @@ const StudentPreference = ()=>{
     map[9] = "16:00 - 17:00"
 
     var day = new Date().getDay();  //return as Sunday-0,Monday-1,Tuesday-2,Wednesday-3,Thursday-4,Friday-5,Saturday-6
-    day = 4;
+    
+    day = 4; // for testing
 
     var today = new Date();
     const currentTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -85,7 +86,8 @@ const StudentPreference = ()=>{
                 </Alert>
     }
 
-    const submitPreferences = async ()=>{
+    const submitPreferences = async (e)=>{
+        e.preventDefault();
         console.log(batch,ID,name)
         const studentID = ID;
         const studentName = name;
@@ -102,7 +104,7 @@ const StudentPreference = ()=>{
         for(j=0;j<lecturesCount;j++){
             const time = schedule[j].time;
             const preference = preferences[j];
-            await submitStudentResponse({batch,time,preference,studentID,studentName})
+            await submitStudentResponse({batch,time,preference,studentID,studentName,day})
             .then((res)=>{
                 if(res.error){
                     setResponse(res.error);
@@ -117,7 +119,8 @@ const StudentPreference = ()=>{
         setResponse("Response collected");
     }
 
-    const updatePreferences = async ()=>{
+    const updatePreferences = async (e)=>{
+        e.preventDefault();
         const studentID = ID;
         const studentName = name;
         var lecturesCount = schedule.length;
@@ -146,14 +149,13 @@ const StudentPreference = ()=>{
     }
 
     const displayResponse=()=>{
-        // console.log(response);
         if(response === 'Response collected' || response === 'Response updated')
         {
             return <Alert  className="d-flex justify-content-center" variant="success">
                         {response}
                     </Alert>
         }
-        else if(response!==""){
+        else{
             return <Alert  className="d-flex justify-content-center" variant="danger">
                         {response}
                     </Alert>
@@ -213,7 +215,7 @@ const StudentPreference = ()=>{
     return (
         <div>
             <Header /> 
-             {displayResponse()}
+             {response && displayResponse()}
             {
                 (day === 5 || day === 6)?weekend():weekday()
             }

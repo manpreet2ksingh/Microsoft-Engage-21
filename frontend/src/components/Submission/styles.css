@@ -46,7 +46,7 @@
 	letter-spacing: 1px;
 	margin: 10px 0;
 	padding-left: 0px;
-    font-size: 18px;
+    font-size: 19px;
 	
 }
 
@@ -64,10 +64,11 @@
 .course-preview a {
 	color: #fff;
 	display: inline-block;
-	font-size: 12px;
-	opacity: 0.6;
-	margin-top: 30px;
+	font-size: 14px;
+	opacity: 0.9;
+	margin-top: 10px;
 	text-decoration: none;
+	cursor: pointer;
 }
 
 .course-info {
@@ -83,14 +84,14 @@
 }
 
 .course-info select{
-  font-size: 18px;
+  font-size: 15px;
   border: 1px solid black;
   border-radius: 0.25em;
   padding: 0.1;
   cursor: pointer;
   line-height: 1.1;
   background-color: #fff;
-  
+  margin-left: 5px;
 }
 
 .btn-box{

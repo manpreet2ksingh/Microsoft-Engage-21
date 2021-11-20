@@ -20,7 +20,9 @@ const Layout = (props)=>{
 
         setLoading(true)
 
-        await signin({email,password})
+        const role = (loginas==='Teacher')?1:0;
+
+        await signin({email,password,role})
         .then(data=>{
             if(data.error)
             {

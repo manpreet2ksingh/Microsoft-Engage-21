@@ -1,17 +1,44 @@
-body {
-    font-family: 'lato', sans-serif;
-  }
-  .container {
+.analysis{
+  box-sizing: border-box;
+}
+.column1 {
+  float: left;
+  width: 30%;
+  padding: 10px;
+}
+
+.column2 {
+  float: left;
+  width: 70%;
+  padding: 10px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+  .container-table {
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
     padding-left: 10px;
     padding-right: 10px;
+    font-family: 'lato', sans-serif;
   }
   h2 {
     font-size: 26px;
     margin: 20px 0;
     text-align: center;
+    font-family: 'lato', sans-serif;
+  }
+
+  h4{
+    font-size: 26px;
+    margin: 20px 0;
+    text-align: center;
+    font-family: 'lato', sans-serif;
   }
   h2 small {
     font-size: 0.5em;
@@ -45,6 +72,7 @@ body {
   .responsive-table .col-4 {
     flex-basis: 25%;
   }
+
   @media (max-width: 767px) {
     .responsive-table .table-header {
       display: none;

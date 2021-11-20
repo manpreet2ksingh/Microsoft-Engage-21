@@ -1,10 +1,9 @@
 import React from 'react'
 import './styles.css'
 
-const LectureCard = ({schedule,index})=>{
+const LectureCard = ({schedule,index,handler=0})=>{
     // console.log(schedule)
-
-    const {time,subject,teacherID} = schedule;
+    // handler - to identify whether student has logged in or teacher
 
     const map = new Map();  // mapping time .... stored as number in database like "1" - 08:00-09:00 .. so on
     map[1] = "08:00 - 09:00"
@@ -17,15 +16,30 @@ const LectureCard = ({schedule,index})=>{
     map[8] = "15:00 - 16:00"
     map[9] = "16:00 - 17:00"
 
+    const teacher = ()=>(
+        <div className="content">
+            <h2>0{index}</h2>
+            <h3>{schedule.subject.toUpperCase()}</h3>
+            <p>Time: {map[schedule.time]}</p>
+            <p>Batch: {schedule.batch}</p>
+        </div>
+    )
+
+    const student = ()=>(
+        <div className="content">
+            <h2>0{index}</h2>
+            <h3>{schedule.subject.toUpperCase()}</h3>
+            <p>Time: {map[schedule.time]}</p>
+            <p>Teacher: {schedule.teacherName}</p>
+        </div>
+    )
+
     return(  
         <div className="card">
             <div className="box">
-            <div className="content">
-                <h2>0{index}</h2>
-                <h3>{subject}</h3>
-                <p>{map[time]}</p>
-                <p>{teacherID}</p>
-            </div>
+                {
+                    handler?teacher():student()
+                }
             </div>
         </div>
     )
