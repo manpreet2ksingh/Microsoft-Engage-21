@@ -13,7 +13,8 @@ const studentResponseSchema = mongoose.Schema(
         type:Number
     },
     preference:{
-        type:String
+        type:String,
+        default:"NA"   // NA-not available/interested
     },
     subject:{
         type:String
@@ -24,7 +25,10 @@ const studentResponseSchema = mongoose.Schema(
     studentName:{
         type:String
     },
-    status:{                    // status of class - online,offline,cancelled
+    day:{
+        type:Number
+    },
+    status:{                    // status of class - online,offline,absent
         type:String,
         default:"Not yet decided"
     }

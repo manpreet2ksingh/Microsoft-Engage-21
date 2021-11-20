@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const {saveResponse, getStudentByID, updateResponse} = require('../controllers/student')
+const {saveResponse, getStudentByID, updateResponse,getStudentsByBatch} = require('../controllers/student')
 
 /* preference for each class for next day -- response collected -- 
 
@@ -17,8 +17,9 @@ url = '/:teacherID/lecture/getAnalysis'
 
 */
 
+router.get('/:batch',getStudentsByBatch);
 router.post('/:studentID/response',saveResponse);
-router.post('/:studentID/updateResponse',updateResponse)
+router.post('/:studentID/updateResponse',updateResponse);
 router.param("studentID",getStudentByID);
 
 module.exports = router

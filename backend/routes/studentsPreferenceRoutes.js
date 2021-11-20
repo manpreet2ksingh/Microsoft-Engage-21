@@ -3,9 +3,9 @@ const router = express.Router();
 
 const {getStudentByID} = require('../controllers/student');
 const {getTeacherByID} = require('../controllers/teacher');
-const {analysis} = require('../controllers/studentsPreference');
+const {analysis} = require('../controllers/Analysis');
 
-router.post('/:teacherID/lecture/getAnalysis',analysis);
+router.post('/lecture/getAnalysis',analysis);
 
 router.param("studentID",getStudentByID);
 router.param('teacherID',getTeacherByID);

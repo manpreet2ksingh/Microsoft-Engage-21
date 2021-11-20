@@ -1,5 +1,6 @@
 const User = require('../models/user')
 const StudentResponse = require('../models/studentResponse')
+const TeacherPreference = require('../models/teacherPreference')
 
 exports.getTeacherByID = async (req,res,next,id)=>{
     await User.findOne({
@@ -39,11 +40,65 @@ const updateOfflineStatus = async (studentID,date,nextDate,batch,time,modeAllote
     })
 }
 
+exports.saveTeacherPreference = async (req,res)=>{
+
+    const {batch,time,modeOfPreference,preferredLectureStrength,vaccinationStatus} = req.body;
+
+    const save = await TeacherPreference.create({
+        batch,
+        time,
+        modeOfPreference,
+        preferredLectureStrength,
+        vaccinationStatus
+    })
+
+    if(save)
+    {
+        return res.status(201).json({
+            result:"Preference saved"
+        })
+    }
+    else
+    {
+        return res.status(400).json({
+            error:"Something went wrong"
+        })
+    }
+}
+
+exports.updateTeacherPreference = async (req,res)=>{
+
+    const {batch,time,modeOfPreference,preferredLectureStrength,vaccinationStatus} = req.body;
+
+    const update = await TeacherPreference.updateOne({
+        batch,
+        time
+    },{
+        $set:{
+            "modeOfPreference":modeOfPreference,
+            "preferredLectureStrength":preferredLectureStrength,
+            "vaccinationStatus":vaccinationStatus
+        }
+    })
+
+    if(update.modifiedCount > 0)
+    {
+        return res.status(201).json({
+            result:"Preference updated"
+        })
+    }
+    else
+    {
+        return res.status(400).json({
+            error:"Error updating preference"
+        })
+    }
+}
 
 exports.responseToTeacher = async (req,res)=>{
     /* preference, batch, subject, time, vaccinationStatus - not vaccinated, partially vaccinated,fully vaccinated */
     
-    const {ModeOfPreferenceOfLecture, batch, time, preferredVaccinationStatus,preferredClassStrength} = req.body;
+    const {ModeOfPreferenceOfLecture, batch, time, preferredVaccinationStatus,preferredLectureStrength} = req.body;
     
     let date = new Date()
     date.setDate(date.getDate() - 1);
@@ -86,7 +141,7 @@ exports.responseToTeacher = async (req,res)=>{
         preference:"Offline",
         updatedAt:{$gte:date,$lt:nextDate}}).sort({createdAt:1});
 
-    var temp = preferredClassStrength;
+    var temp = preferredLectureStrength;
     var ret = [];
     for(var i=0;i<data.length && temp>0;i++)
     {

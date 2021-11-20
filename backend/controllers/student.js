@@ -17,16 +17,38 @@ exports.getStudentByID = async (req,res,next,id)=>{
     })
 }
 
+exports.getStudentsByBatch = async (req,res)=>{
+    
+    const data = await User.find({
+        batch:req.params.batch,
+        role:0
+    },{
+        password:0
+    })
+
+    if(data)
+    {
+        return res.status(201).json(data);
+    }
+    else
+    {
+        return res.status(400).json({
+            error:"Error getting students data"
+        })
+    }
+}
+
 exports.saveResponse = async (req,res)=>{
     
-    const {batch,time,preference,studentID,studentName} = req.body;
+    const {batch,time,preference,studentID,studentName,day} = req.body;
 
     const save = await StudentResponse.create({
         batch,
         time,
         preference,
         studentID,
-        studentName
+        studentName,
+        day
     })
 
     if(save)

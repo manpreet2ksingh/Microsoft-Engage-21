@@ -8,9 +8,9 @@ const cors = require('cors')
 const authRoutes = require('./routes/authRoutes')
 const timeTableRoutes = require('./routes/timeTableRoutes')
 const testRoutes = require('./routes/test')
-const studentRoutes = require('./routes/student')
-const dataRoutes = require('./routes/studentsPreference')
-const teacherRoutes = require('./routes/teacher')
+const studentRoutes = require('./routes/studentRoutes')
+const dataRoutes = require('./routes/studentsPreferenceRoutes')
+const teacherRoutes = require('./routes/teacherRoutes')
 
 const PORT = process.env.PORT || 8000
 

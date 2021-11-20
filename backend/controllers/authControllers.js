@@ -53,11 +53,11 @@ const registerUser = async (req,res)=>{
 }
 
 const authenticateUser = async (req,res)=>{
-    const {email,password} = req.body;
+    const {email,password,role} = req.body;
     
     const user = await User.findOne({email});
 
-    if(user && (await user.matchPassword(password)))
+    if(user && user.role === role && (await user.matchPassword(password)))
     {
         return res.status(201).json({
             ID:user.ID,
