@@ -31,10 +31,11 @@ app.use(morgan('dev'))
 
 app.use('/api/users',authRoutes);
 app.use('/api/timetable',timeTableRoutes);
-app.use('/api',testRoutes)
 app.use('/api/student',studentRoutes);
-app.use('/api',dataRoutes)
-app.use('/api/teacher',teacherRoutes)
+app.use('/api/teacher',teacherRoutes);
+
+app.use('/api',dataRoutes);
+app.use('/api',testRoutes);
 
 app.listen(PORT,()=>{
     console.log(`Server is up and running on PORT ${PORT}`);

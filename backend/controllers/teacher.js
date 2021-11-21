@@ -18,42 +18,88 @@ exports.getTeacherByID = async (req,res,next,id)=>{
     })
 }
 
-const updateRequestStatus = async (ModeOfPreferenceOfLecture,date,nextDate,batch,time)=>{
+const updateRequestStatus = async (ModeOfPreferenceOfLecture,batch,time,day)=>{ // for online && cancelled
     await StudentResponse.updateMany({
         batch,
         time,
-        createdAt:{$gte:date,$lt:nextDate}
+        day
     },{
         $set:{"status":ModeOfPreferenceOfLecture}
     })
 }
 
-const updateOfflineStatus = async (studentID,date,nextDate,batch,time,modeAlloted)=>{
+const handleOfflineModeCase = async (batch,time,day,preferredLectureStrength,vaccinationStatus)=>{
+    /* optimised query to update offline status of given count students*/
+   
+    /* first filter the data using given preferences,
+        then extract the filtered studentID's,
+        then update data using the $in (update those that are present in the "in" set)
+    */
 
-    await StudentResponse.updateOne({
+    results = await StudentResponse.find({
         batch,
         time,
-        studentID,
-        createdAt:{$gte:date,$lt:nextDate}
-    },{
-        $set:{"status":modeAlloted}
+        day,
+        preference:"Offline",
+        vaccinationStatus:{
+            $gte:vaccinationStatus
+        }
+    })
+    .sort({createdAt:1})
+    .limit(preferredLectureStrength)
+    
+    ids = results && results.map((record)=>{
+        return record.studentID
+    })
+
+    await StudentResponse.updateMany({studentID:{$in:ids}},{
+        $set:{
+            status:"Offline"
+        }
     })
 }
 
 exports.saveTeacherPreference = async (req,res)=>{
 
-    const {batch,time,modeOfPreference,preferredLectureStrength,vaccinationStatus} = req.body;
+    var mp = new Map();   // maps vaccinationStatus with a number 
+
+    mp.set("Not vaccinated",0)
+    mp.set("Partially vaccinated",1)
+    mp.set("Fully vaccinated",2)
+
+    var {batch,time,modeOfPreference,preferredLectureStrength,vaccinationStatus} = req.body;
+
+    vaccinationStatus = mp.get(vaccinationStatus)
+
+    var day = new Date().getDay();
+    day = 4;
 
     const save = await TeacherPreference.create({
         batch,
         time,
         modeOfPreference,
         preferredLectureStrength,
-        vaccinationStatus
+        vaccinationStatus,
+        day
     })
 
     if(save)
     {
+        if(modeOfPreference === 'Online' || modeOfPreference === 'NA')
+        {
+            var mode = modeOfPreference
+            if(modeOfPreference === 'NA')  // NA - not available
+            {
+                mode = 'Cancelled';
+            }
+
+            await updateRequestStatus(mode,batch,time,day);
+        }
+        else
+        {
+            handleOfflineModeCase(batch,time,day,preferredLectureStrength,vaccinationStatus)
+        }
+
         return res.status(201).json({
             result:"Preference saved"
         })
@@ -64,11 +110,23 @@ exports.saveTeacherPreference = async (req,res)=>{
             error:"Something went wrong"
         })
     }
+
+    
 }
 
 exports.updateTeacherPreference = async (req,res)=>{
 
-    const {batch,time,modeOfPreference,preferredLectureStrength,vaccinationStatus} = req.body;
+    var mp = new Map();   // maps vaccinationStatus with a number 
+
+    mp.set("Not vaccinated",0)
+    mp.set("Partially vaccinated",1)
+    mp.set("Fully vaccinated",2)
+
+    var {batch,time,modeOfPreference,preferredLectureStrength,vaccinationStatus} = req.body;
+    vaccinationStatus = mp.get(vaccinationStatus)
+
+    var day = new Date().getDay();
+    day = 4;
 
     const update = await TeacherPreference.updateOne({
         batch,
@@ -83,6 +141,40 @@ exports.updateTeacherPreference = async (req,res)=>{
 
     if(update.modifiedCount > 0)
     {
+        if(modeOfPreference === 'Online' || modeOfPreference === 'NA')
+        {
+            var mode = modeOfPreference
+            if(modeOfPreference === 'NA')  // NA - not available
+            {
+                mode = 'Cancelled';
+            }
+
+            await updateRequestStatus(mode,batch,time,day);
+        }
+        else
+        {
+            await StudentResponse.updateMany({
+                batch,
+                time
+            },{
+                $set:{
+                    status:"Not yet decided"
+                }
+            })
+
+           /*
+                ids = db.collection.find(<condition>).limit(<limit>).map(
+                    function(doc) {
+                        return doc._id;
+                    }
+                );
+                db.collection.updateMany({_id: {$in: ids}}, <update>})
+           */
+                
+            handleOfflineModeCase(batch,time,day,preferredLectureStrength,vaccinationStatus)
+
+        }
+
         return res.status(201).json({
             result:"Preference updated"
         })
@@ -95,71 +187,20 @@ exports.updateTeacherPreference = async (req,res)=>{
     }
 }
 
-exports.responseToTeacher = async (req,res)=>{
-    /* preference, batch, subject, time, vaccinationStatus - not vaccinated, partially vaccinated,fully vaccinated */
-    
-    const {ModeOfPreferenceOfLecture, batch, time, preferredVaccinationStatus,preferredLectureStrength} = req.body;
-    
-    let date = new Date()
-    date.setDate(date.getDate() - 1);
+exports.getTeacherLectureStatus = async (req,res)=>{       // online,offline,NA(or not attending)
+    const {batch,time} = req.body;
 
-    var nextDate = new Date();
-    nextDate.setDate(nextDate.getDate() + 1);
-
-    // console.log(date);
-    // console.log(nextDate)
-
-    if(ModeOfPreferenceOfLecture === 'Online' || ModeOfPreferenceOfLecture === 'NA'){
-        if(ModeOfPreferenceOfLecture === 'NA')  // NA - not available
-        {
-            ModeOfPreferenceOfLecture = 'Cancelled';
-        }
-        updateRequestStatus(ModeOfPreferenceOfLecture,date,nextDate,batch,time);
-        return res.status(200).json({
-            result:"Informed to students"
-        })
-    }
-
-    // selecting top students "preferredClassStrength" for offline mode according to response time submission and preference
-
-    const studentsData = await User.find({batch,role:0});
-
-    var map = new Map();   // maps studentID with their vaccination status
-
-    studentsData.forEach((record)=>{
-        map[record.ID] = record.vaccinationStatus;
+    const result = await TeacherPreference.findOne({
+        batch,
+        time
     })
 
-    var mp = new Map();   // maps vaccinationStatus with a number 
-
-    mp["Not vaccinated"] = 0;
-    mp["Partially vaccinated"] = 1;
-    mp["Fully vaccinated"] = 2;
-
-    const data = await StudentResponse.find({batch,
-        time,
-        preference:"Offline",
-        updatedAt:{$gte:date,$lt:nextDate}}).sort({createdAt:1});
-
-    var temp = preferredLectureStrength;
-    var ret = [];
-    for(var i=0;i<data.length && temp>0;i++)
+    if(result)
     {
-        if(mp[map[data[i].studentID]] >= mp[preferredVaccinationStatus])
-        {
-            await updateOfflineStatus(data[i].studentID,date,nextDate,batch,time,"Offline");
-            var selectedStudent = {};
-            selectedStudent.name = data[i].studentName;
-            selectedStudent.ID = data[i].studentID;
-            ret.push(selectedStudent)
-            temp = temp - 1;
-        }else
-        {
-            await updateOfflineStatus(data[i].studentID,date,nextDate,batch,time,"Online");
-        }
+        return res.json(result.modeOfPreference)
     }
 
-    return res.status(200).json({
-        selectedStudents:ret
+    return res.status(400).json({
+        error:"Error getting status"
     })
 }

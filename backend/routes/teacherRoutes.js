@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const {responseToTeacher,getTeacherByID,saveTeacherPreference,updateTeacherPreference} = require('../controllers/teacher')
+const { getTeacherByID,
+        saveTeacherPreference,
+        updateTeacherPreference,
+        getTeacherLectureStatus} = require('../controllers/teacher')
 
-router.post('/Preference',responseToTeacher);
 router.post('/setPreference',saveTeacherPreference);
 router.post('/updatePreference',updateTeacherPreference);
+router.post('/getLectureStatus',getTeacherLectureStatus)
 
 router.param('teacherID',getTeacherByID);
 
