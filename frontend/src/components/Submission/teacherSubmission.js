@@ -23,6 +23,12 @@ const TeacherPreference = ()=>{
     
     day = 4; // for testing
 
+    const deadlineToSubmitPreference = new Date("01-01-1970 23:00:00");  // i.e. 11pm
+    const startTime = new Date("01-01-1970 18:00:00");
+
+    const [deadline,setDeadline] = useState(false)
+    const [start,setStart] = useState(false)
+
 
     const [schedule,setSchedule] = useState([])
     const [response,setResponse] = useState()
@@ -46,6 +52,40 @@ const TeacherPreference = ()=>{
     useEffect(()=>{
         getSchedule()
     },[])
+
+    useEffect(()=>{
+        var today = new Date();
+        var currentTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        currentTime = new Date("01-01-1970 "+currentTime)
+
+        currentTime < startTime && setStart(true)
+        
+        currentTime > deadlineToSubmitPreference && setDeadline(true)
+            
+    })
+
+    const deadlinePassed = ()=>{
+
+        // if preferences are submitted => remove them from local storage
+        schedule && schedule.forEach(element=>{
+            var key = element.batch+element.time
+            localStorage.getItem(key) && localStorage.removeItem(key)
+        })
+
+        return (
+            <Alert  className="d-flex justify-content-center" variant="danger">
+                        Deadline passed.
+            </Alert>
+        )
+    }
+
+    const notStarted = ()=>{
+        return (
+            <Alert  className="d-flex justify-content-center" variant="info">
+                        Preference submission available at 6 PM.
+            </Alert>
+        )
+    }
 
     const weekend = ()=>{
         return <Alert  className="d-flex justify-content-center" variant="success" style={{ marginTop:"50px"}}>
@@ -100,7 +140,7 @@ const TeacherPreference = ()=>{
                 <h6>Deadline to submit/update preferences - 11 PM</h6>
             </div>
             {
-                showLectures()
+                start?notStarted():deadline?deadlinePassed():showLectures()
             }
         </div>
     )

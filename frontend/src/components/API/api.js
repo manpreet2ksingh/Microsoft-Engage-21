@@ -115,3 +115,45 @@ export const updatePreference = async (data)=>{
         return res.json()
     })
 }
+
+export const getStudentLectureStatus = async (data)=>{
+    return await fetch(`http://localhost:8000/api/student/getLectureStatus`,{
+        method:'POST',
+        headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res=>{
+        return res.json()
+    })
+}
+
+export const getTeacherLectureStatus = async (data)=>{
+    return await fetch(`http://localhost:8000/api/teacher/getLectureStatus`,{
+        method:'POST',
+        headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res=>{
+        return res.json()
+    })
+}
+
+export const getStudentsList = async (data)=>{
+    return await fetch(`http://localhost:8000/api/student/getSelectedStudents`,{
+        method:'POST',
+        headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res=>{
+        return res.json()
+    })
+}

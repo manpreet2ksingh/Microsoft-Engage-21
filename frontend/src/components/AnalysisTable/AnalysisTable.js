@@ -50,40 +50,56 @@ const AnalysisTable = (props)=>{
     },[])
 
     return(
-        <div className = "analysis">
+        <div classNameName = "analysis">
             <Header />
-            <h2>Students Response</h2>
-            <div class="row">
-                <div class="column1" >
-                    <h2>{subject.toUpperCase()}</h2>
-                    <h2>Batch : {batch}</h2>
-                    <h2>Time  : {map[time]}</h2>
+            <h2>STUDENTS' RESPONSE</h2>
+            <div className="row">
+                <div className="column1" >
+                    <div className="details">
+                        <h2>{subject.toUpperCase()}</h2>
+                        <h5>Batch : {batch}</h5>
+                        <h5>Time  : {map[time]}</h5>
+                    </div>
                     {
-                        studentData && analysis && <div>
-                            <h2>Stats</h2>
-                            <h4>Batch strength   : {studentData.size}</h4>
-                            <h4>Offline count    : {analysis.offline}</h4>
-                            <h4>Online count     : {analysis.online}</h4>
-                            <h4>Absentees count  : {analysis.absentees}</h4>
+                        studentData && analysis && <div className="stats">
+                            <h2>Statistics</h2>
+                                <table>
+                                    <tr>
+                                        <td>Batch Strength</td>
+                                        <td>{studentData.size}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Offline</td>
+                                        <td>{analysis.offline}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Online</td>
+                                        <td>{analysis.online}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Not Attending</td>
+                                        <td>{analysis.absentees}</td>
+                                    </tr>
+                                </table>
                         </div>
                     }
                 </div>
-                <div class="column2" >
-                    <div class="container-table">
-                        <ul class="responsive-table">
-                            <li class="table-header">
-                                <div class="col col-1">Student ID</div>
-                                <div class="col col-2">Student Name</div>
-                                <div class="col col-3">Vaccination Status</div>
-                                <div class="col col-4">Preference</div>
+                <div className="column2" >
+                    <div className="container-table">
+                        <ul className="responsive-table">
+                            <li className="table-header">
+                                <div className="col col-1">Student ID</div>
+                                <div className="col col-2">Student Name</div>
+                                <div className="col col-3">Vaccination Status</div>
+                                <div className="col col-4">Preference</div>
                             </li>
                             {
                                 studentData && analysis && analysis.data.map((data,i)=>(
-                                    <li key={i}>
-                                        <div class="col col-1">{data.studentID}</div>
-                                        <div class="col col-2">{data.studentName}</div>
-                                        <div class="col col-3">{studentData.get(data.studentID)}</div>
-                                        <div class="col col-4">{data.preference}</div>
+                                    <li className="table-row" key={i}>
+                                        <div className="col col-1">{data.studentID}</div>
+                                        <div className="col col-2">{data.studentName}</div>
+                                        <div className="col col-3">{studentData.get(data.studentID)}</div>
+                                        <div className="col col-4">{data.preference}</div>
                                     </li>
                                 ))
                             }

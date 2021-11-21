@@ -9,6 +9,7 @@ import TimetableLayout from './components/Timetable/Timetable';
 import StudentPreference from './components/Submission/studentSubmission';
 import TeacherPreference from './components/Submission/teacherSubmission';
 import AnalysisTable from './components/AnalysisTable/AnalysisTable';
+import List from './components/OfflineStudentList/List';
 
 const App = () => (
   <BrowserRouter>
@@ -22,6 +23,7 @@ const App = () => (
         <Route path="/studentSubmit" component={StudentPreference} exact />
         <Route path="/teacherSubmit" component={TeacherPreference} exact />
         <Route path="/response" component={AnalysisTable} exact />
+        <Route path="/list" component={List} exact />
     </Switch>
   </BrowserRouter>
 )

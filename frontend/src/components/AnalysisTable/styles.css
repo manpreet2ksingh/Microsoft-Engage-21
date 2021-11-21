@@ -27,22 +27,66 @@
     padding-right: 10px;
     font-family: 'lato', sans-serif;
   }
-  h2 {
-    font-size: 26px;
+  
+ h2 {
+    font-size: 21px;
+    font-weight: bold;
     margin: 20px 0;
     text-align: center;
     font-family: 'lato', sans-serif;
   }
 
   h4{
-    font-size: 26px;
+    /* font-size: 26px; */
     margin: 20px 0;
     text-align: center;
     font-family: 'lato', sans-serif;
   }
+
+ .details h5{
+    font-size: 16px;
+    margin: 10px 0;
+    text-align: center;
+    font-family: 'lato', sans-serif;
+  }
+
   h2 small {
     font-size: 0.5em;
   }
+
+  .details{
+    border:5px solid #95A5A6;
+    margin-left: 15px;
+    border-radius: 25px;
+  }
+
+  .details h2 {
+    margin-bottom: 2px;
+  }
+
+  .stats{
+    margin-left: 30px;
+    margin-top: 30px;
+  }
+
+  .stats h2{
+    color:#95A5A6;
+    text-transform: uppercase;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 0.1px solid rgb(228, 225, 225);
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 8px;
+  }
+
+  tr:nth-child(even) {background-color: #f2f2f2;}
+
   .responsive-table li {
     border-radius: 3px;
     padding: 25px 30px;

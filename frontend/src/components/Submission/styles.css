@@ -20,9 +20,13 @@
 	color: #0c0847;
 }
 
+#container h2{
+	text-align: center;
+}
+
 #container h6{
 	color: white;
-	margin-left: 120px;
+	text-align: center;
 }
 
 .course {
@@ -47,7 +51,7 @@
 	margin: 10px 0;
 	padding-left: 0px;
     font-size: 19px;
-	
+	text-align: left;
 }
 
 .course-preview {
@@ -77,10 +81,18 @@
 	width: 100%;
 }
 
+.course-info .strength{
+
+	border: 1px solid black;
+	border-radius: 0.25em;
+	margin-top: 2px;
+}
+
 .course-info label{
   font-size: 18px;
   font-weight: 600;
   letter-spacing: 1px;
+  margin-bottom: 3px;
 }
 
 .course-info select{
@@ -92,6 +104,17 @@
   line-height: 1.1;
   background-color: #fff;
   margin-left: 5px;
+  width: 70%;
+}
+
+input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+  
+input[type=number] {
+	-moz-appearance: textfield;
 }
 
 .btn-box{

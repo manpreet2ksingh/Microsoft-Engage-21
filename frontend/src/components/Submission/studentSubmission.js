@@ -23,11 +23,16 @@ const StudentPreference = ()=>{
     
     day = 4; // for testing
 
-    var today = new Date();
-    const currentTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    const deadlineToSubmitPreference = new Date("01-01-1970 18:00:00");  // i.e. 6pm
+    
+    // console.log(deadlineToSubmitPreference)
     // console.log(currentTime)
+    // if(currentTime > deadlineToSubmitPreference)
+    // {
+    //     console.log("HELLO")
+    // }
 
-    const deadlineToSubmitPreference = "18:00:00";  // i.e. 6pm
+    const [deadline,setDeadline] = useState(false)
 
     const [schedule,setSchedule] = useState([])
     const [preferences,setPreferences] = useState([]);
@@ -77,6 +82,14 @@ const StudentPreference = ()=>{
     useEffect(()=>{
         getSchedule();
     },[])
+
+    useEffect(()=>{
+        var today = new Date();
+        var currentTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    
+        currentTime = new Date("01-01-1970 "+currentTime)
+        currentTime > deadlineToSubmitPreference && setDeadline(true)
+    },{deadline})
 
     const weekend = ()=>{
         return <Alert  className="d-flex justify-content-center" variant="success" style={{ marginTop:"50px"}}>
@@ -207,7 +220,7 @@ const StudentPreference = ()=>{
                 <h6>Deadline to submit/update preferences - 6 PM</h6>
             </div>
             {
-                (currentTime > deadlineToSubmitPreference)?deadlinePassed():showLectures()
+                deadline?deadlinePassed():showLectures()
             }
         </div>
     )

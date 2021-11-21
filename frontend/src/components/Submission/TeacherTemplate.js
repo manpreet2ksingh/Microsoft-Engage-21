@@ -103,7 +103,8 @@ const TeacherTemplate = ({lecture,map,updateResponse})=>{
                                 <option value="Fully vaccinated">Fully vaccinated</option>
                             </select>
                             <label>Preferred lecture strength</label>
-                            <input type="number" 
+                            <input className="strength"
+                                   type="number" 
                                    value={preferredLectureStrength}
                                    onChange={handleChange('preferredLectureStrength')} />
                     </div>

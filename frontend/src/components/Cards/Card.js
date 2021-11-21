@@ -1,9 +1,53 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import {Link} from 'react-router-dom'
+import { getStudentLectureStatus, getTeacherLectureStatus } from '../API/api';
 import './styles.css'
 
 const LectureCard = ({schedule,index,handler=0})=>{
     // console.log(schedule)
     // handler - to identify whether student has logged in or teacher
+
+    const [status,setStatus] = useState();
+
+    const {ID,batch} = JSON.parse(localStorage.getItem('userInfo'))
+
+    const updateStudentStatus = async ()=>{
+        var studentID = ID;
+        const {time} = schedule;
+        console.log(studentID,batch,time)
+        await getStudentLectureStatus({batch,time,studentID})
+        .then(res=>{
+            if(res.error)
+            {
+                console.log(res.error)
+            }
+            else
+            {
+                console.log(res)
+                setStatus(res)
+            }
+        })
+    }
+
+    const updateTeacherStatus = async ()=>{
+        const {batch,time} = schedule;
+        await getTeacherLectureStatus({batch,time})
+        .then(res=>{
+            if(res.error)
+            {
+                console.log(res.error)
+            }
+            else
+            {
+                console.log(res)
+                setStatus(res)
+            }
+        })
+    }
+
+    useEffect(()=>{
+        handler === 0?updateStudentStatus():updateTeacherStatus();
+    },[])
 
     const map = new Map();  // mapping time .... stored as number in database like "1" - 08:00-09:00 .. so on
     map[1] = "08:00 - 09:00"
@@ -20,8 +64,19 @@ const LectureCard = ({schedule,index,handler=0})=>{
         <div className="content">
             <h2>0{index}</h2>
             <h3>{schedule.subject.toUpperCase()}</h3>
-            <p>Time: {map[schedule.time]}</p>
-            <p>Batch: {schedule.batch}</p>
+            <p>Time : {map[schedule.time]}</p>
+            <p>Batch : {schedule.batch}</p>
+            <p>Status : {status}</p>
+            {
+                status === 'Offline' && 
+                <Link to={{
+                    pathname:"/list",
+                    state:{
+                        batch:schedule.batch,
+                        time: schedule.time
+                    }
+                }}>List of students</Link>
+            }
         </div>
     )
 
@@ -29,8 +84,9 @@ const LectureCard = ({schedule,index,handler=0})=>{
         <div className="content">
             <h2>0{index}</h2>
             <h3>{schedule.subject.toUpperCase()}</h3>
-            <p>Time: {map[schedule.time]}</p>
-            <p>Teacher: {schedule.teacherName}</p>
+            <p>Time : {map[schedule.time]}</p>
+            <p>Teacher : {schedule.teacherName}</p>
+            <p>Status : {status}</p>
         </div>
     )
 
