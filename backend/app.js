@@ -4,13 +4,16 @@ const app = express();
 const mongoose = require('mongoose');
 const morgan = require('morgan')
 const cors = require('cors')
+const fileUpload = require('express-fileupload');
 
+const userRoutes = require('./routes/userRoutes')
 const authRoutes = require('./routes/authRoutes')
 const timeTableRoutes = require('./routes/timeTableRoutes')
 const testRoutes = require('./routes/test')
 const studentRoutes = require('./routes/studentRoutes')
 const dataRoutes = require('./routes/studentsPreferenceRoutes')
 const teacherRoutes = require('./routes/teacherRoutes')
+const extraClassRoutes = require('./routes/extraClassRoutes')
 
 const PORT = process.env.PORT || 8000
 
@@ -27,12 +30,14 @@ mongoose.connect(
 app.use(cors());
 app.use(express.json())
 app.use(morgan('dev'))
+app.use(fileUpload());
 
-
+app.use('/api/user',userRoutes);
 app.use('/api/users',authRoutes);
 app.use('/api/timetable',timeTableRoutes);
 app.use('/api/student',studentRoutes);
 app.use('/api/teacher',teacherRoutes);
+app.use('/api/extraClass',extraClassRoutes);
 
 app.use('/api',dataRoutes);
 app.use('/api',testRoutes);

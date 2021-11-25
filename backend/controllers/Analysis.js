@@ -13,14 +13,18 @@ exports.analysis = async (req,res)=>{
         })
     }
 
-    var day =new Date().getDay();
-    day = 4; // for testing purpose
+    const {batch,time,day} = req.body;
 
-    const {batch,time} = req.body;
+    var nextDate = new Date();
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    var previousDate = new Date();
+    previousDate.setDate(previousDate.getDate() - 2);
 
     var data = await StudentResponse.find({batch,
                                             time,
-                                            day});
+                                            day,
+                                            createdAt:{$gte:previousDate,$lte:nextDate}});
 
     var offline=0,online=0,absentees=0;
 

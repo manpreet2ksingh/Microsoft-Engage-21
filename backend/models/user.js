@@ -20,6 +20,9 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    contact:{
+      type: String
+    },
     role: {             // role - 0:students ; 1:teachers
       type: Number,
       required: true,
@@ -34,7 +37,8 @@ const userSchema = mongoose.Schema(
         default:"Not vaccinated"
     },
     vaccinationCertificate:{
-        type:String // for time-being
+        data:Buffer,
+        contentType:String
     }
   },
   {

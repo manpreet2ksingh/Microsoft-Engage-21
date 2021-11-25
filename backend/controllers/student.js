@@ -1,6 +1,18 @@
 const StudentResponse = require('../models/studentResponse');
 const User = require('../models/user')
 
+exports.updateVaccinationStatus = async (req,res)=>{
+    if (req.files === null) {
+        return res.status(400).json({ msg: 'No file uploaded' });
+    }
+
+    // console.log(req.body)
+    // console.log(req.files)
+
+    console.log("HELLO ",req.body.vaccinationStatus)
+    return res.json("HELLO")
+}
+
 exports.getStudentByID = async (req,res,next,id)=>{
     await User.findOne({
         ID:id,
@@ -42,13 +54,18 @@ exports.saveResponse = async (req,res)=>{
     
     const {batch,time,preference,studentID,studentName,day} = req.body;
 
+    const user = await User.findOne({ID:studentID})
+
+    // console.log(user.vaccinationStatus)
+
     const save = await StudentResponse.create({
         batch,
         time,
         preference,
         studentID,
         studentName,
-        day
+        day,
+        "vaccinationStatus":user.vaccinationStatus
     })
 
     if(save)
@@ -66,13 +83,21 @@ exports.saveResponse = async (req,res)=>{
 }
 
 exports.updateResponse = async (req,res)=>{
-    const {batch,time,preference,studentID,studentName} = req.body;
+    const {batch,time,preference,studentID,studentName,day} = req.body;
+
+    var nextDate = new Date();
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    var previousDate = new Date();
+    previousDate.setDate(previousDate.getDate() - 2);
 
     const response = await StudentResponse.updateOne({
         batch,
         time,
         studentID,
-        studentName
+        studentName,
+        day,
+        createdAt:{$gte:previousDate,$lte:nextDate}
     },{
         $set:{
             "preference":preference,
@@ -91,10 +116,7 @@ exports.updateResponse = async (req,res)=>{
 }
 
 exports.selectedStudentsForOfflineLecture = async (req,res)=>{
-    const {batch,time} = req.body;
-
-    var day = new Date().getDay();
-    day = 4; // for testing
+    const {batch,time,day} = req.body;
 
     const studentsData = await User.find({batch,role:0});
 
@@ -110,11 +132,18 @@ exports.selectedStudentsForOfflineLecture = async (req,res)=>{
     mp.set("Partially vaccinated",1)
     mp.set("Fully vaccinated",2)
 
+    var nextDate = new Date();
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    var previousDate = new Date();
+    previousDate.setDate(previousDate.getDate() - 2);
+
     const data = await StudentResponse.find({
         batch,
         time,
         status:"Offline",
         day,
+        createdAt:{$gte:previousDate,$lte:nextDate}
     });
 
     console.log(data)
@@ -134,19 +163,32 @@ exports.selectedStudentsForOfflineLecture = async (req,res)=>{
 }
 
 exports.getLectureStatus = async (req,res)=>{       // online,offline,NA(or not attending)
-    const {batch,time,studentID} = req.body;
+    const {batch,time,studentID,day} = req.body;
+
+    /*
+        to get records of todays lecture status whose preferences/responses were submitted one yesterday.
+
+        day attribute will help filter the results for today.
+    */
+    var nextDate = new Date();
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    var previousDate = new Date();
+    previousDate.setDate(previousDate.getDate() - 2);
 
     const result = await StudentResponse.findOne({
         batch,
         time,
-        studentID
+        studentID,
+        day,
+        createdAt:{$gte:previousDate,$lte:nextDate}
     })
 
     if(result)
     {
         return res.json(result.status)
     }
-    return res.status(400).json({
-        error:"Error getting status"
+    return res.status(200).json({
+        error:"Status not updated"
     })
 }

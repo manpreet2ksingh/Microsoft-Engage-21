@@ -8,6 +8,9 @@ const teacherPreferenceSchema = mongoose.Schema(
     time:{
         type:Number
     },
+    day:{
+        type:Number
+    },
     modeOfPreference:{          //online,offline,cancelled
         type:String,
         required:true

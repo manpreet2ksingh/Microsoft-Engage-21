@@ -28,9 +28,12 @@ const studentResponseSchema = mongoose.Schema(
     day:{
         type:Number
     },
+    vaccinationStatus:{
+        type:String
+    },
     status:{                    // status of class - online,offline,absent
         type:String,
-        default:"Not yet decided"
+        default:"Not yet known"
     }
   },
   {

@@ -19,10 +19,18 @@ exports.getTeacherByID = async (req,res,next,id)=>{
 }
 
 const updateRequestStatus = async (ModeOfPreferenceOfLecture,batch,time,day)=>{ // for online && cancelled
+    
+    var nextDate = new Date();
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    var previousDate = new Date();
+    previousDate.setDate(previousDate.getDate() - 2);
+    
     await StudentResponse.updateMany({
         batch,
         time,
-        day
+        day,
+        createdAt:{$gte:previousDate,$lte:nextDate}
     },{
         $set:{"status":ModeOfPreferenceOfLecture}
     })
@@ -36,6 +44,12 @@ const handleOfflineModeCase = async (batch,time,day,preferredLectureStrength,vac
         then update data using the $in (update those that are present in the "in" set)
     */
 
+    var nextDate = new Date();
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    var previousDate = new Date();
+    previousDate.setDate(previousDate.getDate() - 2);
+
     results = await StudentResponse.find({
         batch,
         time,
@@ -47,12 +61,14 @@ const handleOfflineModeCase = async (batch,time,day,preferredLectureStrength,vac
     })
     .sort({createdAt:1})
     .limit(preferredLectureStrength)
+
+    // console.log("HELLO ",results);
     
     ids = results && results.map((record)=>{
         return record.studentID
     })
 
-    await StudentResponse.updateMany({studentID:{$in:ids}},{
+    await StudentResponse.updateMany({studentID:{$in:ids},time,createdAt:{$gte:previousDate,$lte:nextDate}},{
         $set:{
             status:"Offline"
         }
@@ -67,12 +83,11 @@ exports.saveTeacherPreference = async (req,res)=>{
     mp.set("Partially vaccinated",1)
     mp.set("Fully vaccinated",2)
 
-    var {batch,time,modeOfPreference,preferredLectureStrength,vaccinationStatus} = req.body;
+    var {batch,time,modeOfPreference,preferredLectureStrength,vaccinationStatus,day} = req.body;
 
     vaccinationStatus = mp.get(vaccinationStatus)
 
-    var day = new Date().getDay();
-    day = 4;
+    var day = new Date().getDay()-1;
 
     const save = await TeacherPreference.create({
         batch,
@@ -97,7 +112,7 @@ exports.saveTeacherPreference = async (req,res)=>{
         }
         else
         {
-            handleOfflineModeCase(batch,time,day,preferredLectureStrength,vaccinationStatus)
+            await handleOfflineModeCase(batch,time,day,preferredLectureStrength,vaccinationStatus)
         }
 
         return res.status(201).json({
@@ -122,15 +137,22 @@ exports.updateTeacherPreference = async (req,res)=>{
     mp.set("Partially vaccinated",1)
     mp.set("Fully vaccinated",2)
 
-    var {batch,time,modeOfPreference,preferredLectureStrength,vaccinationStatus} = req.body;
+    var {batch,time,modeOfPreference,preferredLectureStrength,vaccinationStatus,day} = req.body;
     vaccinationStatus = mp.get(vaccinationStatus)
 
     var day = new Date().getDay();
-    day = 4;
+
+    var nextDate = new Date();
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    var previousDate = new Date();
+    previousDate.setDate(previousDate.getDate() - 2);
 
     const update = await TeacherPreference.updateOne({
         batch,
-        time
+        time,
+        day,
+        createdAt:{$gte:previousDate,$lte:nextDate}
     },{
         $set:{
             "modeOfPreference":modeOfPreference,
@@ -188,19 +210,31 @@ exports.updateTeacherPreference = async (req,res)=>{
 }
 
 exports.getTeacherLectureStatus = async (req,res)=>{       // online,offline,NA(or not attending)
-    const {batch,time} = req.body;
+    const {batch,time,day} = req.body;
+
+    var nextDate = new Date();
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    var previousDate = new Date();
+    previousDate.setDate(previousDate.getDate() - 2);
 
     const result = await TeacherPreference.findOne({
         batch,
-        time
+        time,
+        day,
+        createdAt:{$gte:previousDate,$lte:nextDate}
     })
 
     if(result)
     {
+        if(result.modeOfPreference == "NA")
+        {
+            return res.json("Cancelled")
+        }
         return res.json(result.modeOfPreference)
     }
 
-    return res.status(400).json({
-        error:"Error getting status"
+    return res.status(200).json({
+        error:"status not updated."
     })
 }
