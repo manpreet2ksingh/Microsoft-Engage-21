@@ -5,7 +5,6 @@ import './styles.css'
 
 const AnalysisTable = (props)=>{
     var {time,batch,subject,day} = props.location.state;
-    day = 4;
 
     const map = new Map();  // mapping time .... stored as number in database like "1" - 08:00-09:00 .. so on
     map[1] = "08:00 - 09:00"

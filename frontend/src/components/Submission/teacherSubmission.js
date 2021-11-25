@@ -21,9 +21,9 @@ const TeacherPreference = ()=>{
 
     var day = new Date().getDay();  //return as Sunday-0,Monday-1,Tuesday-2,Wednesday-3,Thursday-4,Friday-5,Saturday-6
     
-    day = 4; // for testing
+    // day = 4; // for testing
 
-    const deadlineToSubmitPreference = new Date("01-01-1970 23:00:00");  // i.e. 11pm
+    const deadlineToSubmitPreference = new Date("01-01-1970 23:30:00");  // i.e. 11pm
     const startTime = new Date("01-01-1970 18:00:00");
 
     const [deadline,setDeadline] = useState(false)

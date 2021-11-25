@@ -10,6 +10,10 @@ import StudentPreference from './components/Submission/studentSubmission';
 import TeacherPreference from './components/Submission/teacherSubmission';
 import AnalysisTable from './components/AnalysisTable/AnalysisTable';
 import List from './components/OfflineStudentList/List';
+import ExtraClass from './components/ExtraClass/ExtraClass';
+import VaccinationStatusUpdate from './components/UpdateVaccinationStatus/UpdateVaccinationStatus'
+
+import Test from './components/testing'
 
 const App = () => (
   <BrowserRouter>
@@ -23,7 +27,10 @@ const App = () => (
         <Route path="/studentSubmit" component={StudentPreference} exact />
         <Route path="/teacherSubmit" component={TeacherPreference} exact />
         <Route path="/response" component={AnalysisTable} exact />
+        <Route path="/extraLecture" component={ExtraClass} exact />
+        <Route path="/updateVaccinationStatus" component={VaccinationStatusUpdate} exact />
         <Route path="/list" component={List} exact />
+        <Route path="/test" component={Test} exact />
     </Switch>
   </BrowserRouter>
 )

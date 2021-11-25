@@ -6,6 +6,11 @@ import './styles.css'
 const List = (props)=>{
     var {time,batch} = props.location.state;
 
+    var day = new Date().getDay();
+    day = day - 1;
+    
+    console.log(day);
+
     const map = new Map();  // mapping time .... stored as number in database like "1" - 08:00-09:00 .. so on
     map[1] = "08:00 - 09:00"
     map[2] = "09:00 - 10:00"
@@ -22,7 +27,7 @@ const List = (props)=>{
     const [studentList,setStudentList] = useState();
 
     const studentsList = async ()=>{
-        await getStudentsList({batch,time})
+        await getStudentsList({batch,time,day})
         .then(res=>{
             if(res.error){
                 console.log(res.error)

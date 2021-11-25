@@ -8,17 +8,19 @@ const TeacherTemplate = ({lecture,map,updateResponse})=>{
     const {time,subject,batch} = lecture;
     const day = new Date().getDay();
 
+    var key = batch+time;
+
+    const check = localStorage.getItem(key)?localStorage.getItem(key):"";
+
+    // console.log(key,check)
+
     const [preferences,setPreferences] = useState([{
-        modeOfPreference:"",
+        modeOfPreference:check,
         preferredLectureStrength:0,
         vaccinationStatus:""
     }]);
 
     const {modeOfPreference,preferredLectureStrength,vaccinationStatus} = preferences
-
-    var key = batch+time;
-
-    var check = localStorage.getItem(key)?localStorage.getItem(key):null;
 
     const handleChange = (name) =>(event)=>{
         updateResponse()
@@ -32,14 +34,15 @@ const TeacherTemplate = ({lecture,map,updateResponse})=>{
                                 time,
                                 batch,
                                 preferredLectureStrength,
-                                vaccinationStatus})
+                                vaccinationStatus,
+                                day})
             .then(res=>{
                 if(res.error){
                     console.log("Error submitting response")
                     updateResponse(res.error)
                 }
                 else{
-                    localStorage.setItem(key,preferences)
+                    localStorage.setItem(key,modeOfPreference)
                     updateResponse(`Preference saved for ${subject.toUpperCase()} lecture scheduled at ${map[time]}`)
                 }
             })
@@ -52,14 +55,15 @@ const TeacherTemplate = ({lecture,map,updateResponse})=>{
                                 time,
                                 batch,
                                 preferredLectureStrength,
-                                vaccinationStatus})
+                                vaccinationStatus,
+                                day})
             .then(res=>{
                 if(res.error){
                     console.log("Error updating response")
                     updateResponse(res.error)
                 }
                 else{
-                    localStorage.setItem(key,preferences)
+                    localStorage.setItem(key,modeOfPreference)
                     updateResponse(`Preference updated for ${subject.toUpperCase()} lecture scheduled at ${map[time]}`)
                 }
             })

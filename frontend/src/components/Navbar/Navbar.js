@@ -2,10 +2,11 @@ import React from "react";
 import {
   Container,
   Nav,
-  Navbar
+  Navbar,
+  NavDropdown
 } from "react-bootstrap";
 
-import {useHistory} from 'react-router-dom'
+import {useHistory,Link} from 'react-router-dom'
 
 function Header() {
   
@@ -42,17 +43,38 @@ function Header() {
             <Nav.Link href="/teacherSubmit">
 						    Submit preference
 					  </Nav.Link>}
-          
-					<Nav.Link onClick={()=>{
-							localStorage.removeItem('userInfo')
-							history.push("/")
-						}}>
-                    Logout
-               </Nav.Link>
+
+			{
+				(userInfo.role === 1) && 
+					<Nav.Link as={Link} to={{
+						pathname:"/extraLecture",
+						state:{
+							operation:"schedule"
+						}
+					}}>
+							Schedule an extra lecture
+					</Nav.Link>
+			}
 					
-					<Nav.Item className="ml-auto">
-      				<Nav.Link>Welcome {userInfo.name}</Nav.Link>
-    				</Nav.Item>
+					<NavDropdown className="ml-auto"  title={`Welcome ${userInfo.name}`}>
+						<Nav.Item className="ml-auto">
+							<Nav.Link>Update profile</Nav.Link>
+						</Nav.Item>
+
+						<Nav.Item className="ml-auto">
+							<Nav.Link href="/updateVaccinationStatus">Update vaccination status</Nav.Link>
+						</Nav.Item>
+						
+						<Nav.Item className="ml-auto">
+							<Nav.Link onClick={()=>{
+										localStorage.removeItem('userInfo')
+										history.push("/")
+									}}>
+								Logout
+							</Nav.Link>
+						</Nav.Item>
+
+					</NavDropdown>
 					
               </>
 

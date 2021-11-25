@@ -1,35 +1,46 @@
 import React, { useState,useEffect } from 'react'
-import './styles.css'
-import {TimeTable} from '../API/api'
+import {TimeTable,TeacherTimeTable} from '../API/api'
+import Display from './Display'
+import Header from '../Navbar/Navbar'
+import { Container,Row,Col } from 'react-bootstrap'
+import Card from 'react-bootstrap/Card'
 
 const TimetableLayout = ()=>{
+    const [timetable,setTimeTable] = useState()
 
-    var md = new Array(5);
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
-    for (var i = 0; i < md.length; i++) {
-        md[i] = new Array(9);
-        for(var j=0;j<9;j++)
-        {
-            md[i][j] = j+1;
-        }
-    }
-
-    const [timetable,setTimeTable] = useState([[{}]])
+    var dayOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"]
 
     const getTimeTable = async ()=>{
-        await TimeTable()
-        .then(data=>{
-            setTimeTable(data.timetable)
-            
-            // for(var i=0;i<5;i++){
-            //     var len = timetable[i].length;
-            //     for(var j=0;j<len;j++)
-            //     {
-            //         md[i][timetable[i][j].time-1] = timetable[i][j];
-            //     }
-            // }
-            // console.log(md);
-        })
+        if(userInfo.role == 0)
+        {
+            await TimeTable(userInfo.batch)
+            .then(data=>{
+                if(data.error)
+                {
+                    console.log(data.error)
+                }
+                else{
+                    console.log(data.timetable)
+                    setTimeTable(data.timetable)
+                }
+            })
+        }
+        else
+        {
+            await TeacherTimeTable(userInfo.ID)
+            .then(data=>{
+                if(data.error)
+                {
+                    console.log(data.error)
+                }
+                else{
+                    console.log(data.timetable)
+                    setTimeTable(data.timetable)
+                }
+            })    
+        }
     }
 
     useEffect(()=>{
@@ -37,97 +48,31 @@ const TimetableLayout = ()=>{
     },[])
 
     return(
-        <div className="timetable">
-            <div className="week-names">
-                <div>monday</div>
-                <div>tuesday</div>
-                <div>wednesday</div>
-                <div>thursday</div>
-                <div>friday</div>
-                <div className="weekend">saturday</div>
-                <div className="weekend">sunday</div>
-            </div>
-            <div className="time-interval">
-                <div>8:00 - 9:00 </div>
-                <div>9:00 - 10:00 </div>
-                <div>10:00 - 11:00 </div>
-                <div>11:00 - 12:00</div>
-                <div>12:00 - 13:00</div>
-                <div>13:00 - 14:00</div>
-                <div>14:00 - 15:00</div>
-                <div>15:00 - 16:00</div>
-                <div>16:00 - 17:00</div>
-            </div>
-            <div className="content">
-                {/* {
-                    timetable.map((record,i)=>(
-                        record.map((lecture,j)=>(
-                            <div>
-                                <div className="accent-orange-gradient"><p>{lecture.subject}</p></div>
-                            </div>
-                        ))
+        <div style={{backgroundColor:'rgba(248, 245, 245, 0.945)'}}>
+            <Header />
+            <h2>Weekly Timetable</h2>
+            <Container>
+                {
+                    timetable && timetable.map((daySchedule,i)=>(
+                        <Row className='mt-5' key={i}>
+                            <Col>
+                                <Card body style={{ width: '9rem',fontWeight:'600'}} border="dark"> 
+                                    {dayOfWeek[i].toUpperCase()}
+                                </Card>
+                            </Col>
+                        {
+                            daySchedule.map((lecture,j)=>(
+                                <Col>
+                                    <Display lecture={lecture} account={userInfo.role} key={j}/>
+                                </Col>    
+                            ))
+                        }
+                       
+                        </Row>
                     ))
-                } */}
-                <div>
-                <div className="accent-orange-gradient"></div>
-                </div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                <div>
-                    <div className="accent-green-gradient"></div>
-                </div>
-                    <div className="weekend"></div>
-                    <div className="weekend"></div>
-
-                <div></div>
-                <div></div>
-                <div></div>
-                <div>
-                    <div className="accent-cyan-gradient"></div>
-                </div>
-                <div></div>
-                <div className="weekend"></div>
-                <div className="weekend"></div>
-
-                <div>
-                <div className="accent-pink-gradient"></div>
-                </div>
-                <div></div>
-                <div>
-                <div className="accent-purple-gradient"></div>
-                </div>
-                <div></div>
-                <div></div>
-                <div className="weekend"></div>
-                <div className="weekend"></div>
-
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div className="weekend"></div>
-                <div className="weekend"></div>
-
-                <div>
-                <div className="accent-purple-gradient"></div>
-                </div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div className="weekend"></div>
-                <div className="weekend"></div>
-
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div className="weekend"></div>
-                <div className="weekend"></div>
-            </div>
+                }
+            </Container>
+            <div style={{ marginTop:'20px'}}>.</div>
         </div>
     )
 }

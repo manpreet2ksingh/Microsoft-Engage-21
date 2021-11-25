@@ -157,3 +157,77 @@ export const getStudentsList = async (data)=>{
         return res.json()
     })
 }
+
+export const createExtraClass = async (data)=>{
+    return await fetch(`http://localhost:8000/api/extraClass/create`,{
+        method:'POST',
+        headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res=>{
+        return res.json()
+    })
+}
+
+export const upcomingExtraLectures = async (batch)=>{
+    return await fetch(`http://localhost:8000/api/extraClass/student/${batch}/get`,{
+        method:"GET"
+    }).then(res=>{
+        return res.json()
+    })
+    .catch(error=>{
+        console.log(error)
+    })
+}
+
+export const upcomingExtraLecturesByTeacherID = async (teacherID)=>{
+    return await fetch(`http://localhost:8000/api/extraClass/teacher/${teacherID}/get`,{
+        method:"GET"
+    }).then(res=>{
+        return res.json()
+    })
+    .catch(error=>{
+        console.log(error)
+    })
+}
+
+export const deleteExtraClass = async (data)=>{
+    return await fetch(`http://localhost:8000/api/extraClass/delete`,{
+        method:'POST',
+        headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res=>{
+        return res.json()
+    })
+}
+
+export const updateExtraClass = async (data)=>{
+    return await fetch(`http://localhost:8000/api/extraClass/update`,{
+        method:'POST',
+        headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res=>{
+        return res.json()
+    })
+}
+
+export const updateVaccinationStatus = async (data)=>{
+    return await fetch(`http://localhost:8000/api/user/updateVaccinationStatus`,{
+        method:'POST',
+        body: data
+    })
+    .then(res=>{
+        return res.json()
+    })
+}
