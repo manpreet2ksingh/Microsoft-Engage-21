@@ -53,20 +53,6 @@ const TeacherDashboard = ()=>{
                 </Alert>
     }
 
-    const weekday = ()=>{
-        return(
-            <div>
-                {
-                    extraLectures && extraLectures.length > 0 ?
-                    extraLectures.map((lectureData,i)=>(
-                        <ExtraLectureCard data={lectureData} key={i} index={++i} />
-                    )):
-                    <h4>No upcoming extra lectures!</h4> 
-                }
-            </div>
-        )
-    }
-
     useEffect(()=>{
         getSchedule();
         getUpcomingExtraLectures();
@@ -87,7 +73,12 @@ const TeacherDashboard = ()=>{
                         </h3>
                     
                 <div className="container">
-                    {(day===5 || day===6)?weekend():weekday()
+                    {
+                        (day===5 || day===6)?weekend():extraLectures && extraLectures.length > 0 ?
+                        extraLectures.map((lectureData,i)=>(
+                            <ExtraLectureCard data={lectureData} key={i} index={++i} handler={1}/>
+                        )):
+                        <h4>No upcoming extra lectures!</h4> 
                     }
                 </div>
                

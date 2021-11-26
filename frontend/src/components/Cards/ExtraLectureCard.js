@@ -54,6 +54,7 @@ const ExtraLectureCard = ({data,index,handler=0})=>{
             <p>Date : {data.date}</p>
             <p>Time : {data.time}</p>
             <p>Duration: {data.duration}</p>
+            <p>Mode: {data.preference}</p>
         </div>
     )
 
