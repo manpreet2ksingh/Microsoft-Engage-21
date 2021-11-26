@@ -1,7 +1,79 @@
-const { Int32 } = require('bson');
 const ExtraClass = require('../models/extraClass')
 
 const TimeTable = require('../models/studentTimeTable')
+
+
+const conflictCheck = async (date,time,duration,batch,_id)=>{
+
+    var day = new Date(date).getDay();
+
+    day = day - 1;
+    day = (day+7)%7;
+
+    const dateTime = new Date(date+" "+time)
+
+    var [hh,mm] = time.split(":")           // hh - hour ; mm - minutes
+
+    var [durationHH,durationMM] = duration.split(":")
+
+    hh = parseInt(hh);
+    mm = parseInt(mm);
+    durationHH = parseInt(durationHH);
+    durationMM = parseInt(durationMM);
+
+    var minutesToAdd = durationHH*60+durationMM;
+    var startTime    = new Date("01-01-1970 "+hh+":"+mm);
+    var endingTime   = new Date(startTime.getTime() + minutesToAdd*60000);
+
+    var ehh = endingTime.getHours().toString();
+    var emm = endingTime.getMinutes().toString();
+
+    const endingDateTime = new Date(date+" "+ehh+":"+emm);
+
+    startTimeOfExtraLecture = hh;
+    endTimeOfExtraLecture = endingTime.getMinutes()?endingTime.getHours()+1:endingTime.getHours();
+
+    const response = await TimeTable.findOne({batch});
+
+    var timetable = response.timetable[day];
+
+    var flag = false;
+
+    /* checking conflicts with timetable */
+
+    timetable && timetable.forEach(lecture=>{
+        var startTimeOfLecture = lecture.time + 7;
+        var endTimeOfLecture = lecture.time + 8;
+
+        if((startTimeOfExtraLecture>=startTimeOfLecture && endTimeOfExtraLecture<=endTimeOfLecture) ||
+           (startTimeOfExtraLecture<=startTimeOfLecture && endTimeOfExtraLecture>=endTimeOfLecture))
+        {
+            flag = true;
+        }
+    })
+
+    // checking conflicts with other extra lectures created
+
+    const end = endingDateTime.toISOString()
+    const start = dateTime.toISOString()
+  
+    const results = await ExtraClass.find({
+        batch,
+        _id:{$ne:_id},          /* excluding the one to be updated ; only in update case */
+        $or:[
+           { $and: [{dateTime:{$gte:new Date(start)}},{endingDateTime:{$lte:new Date(end)}}]},
+           { $and: [{dateTime:{$lte:new Date(start)}},{endingDateTime:{$gte:new Date(end)}}]}
+        ]
+    })
+
+    // console.log(results)
+
+    if(flag || results.length>0)
+    {
+        return 1;
+    }
+    return 0;
+}
 
 const createExtraClass = async (req,res)=>{
     const {batch,
@@ -14,23 +86,25 @@ const createExtraClass = async (req,res)=>{
         subject,
         vaccinationStatus,
         lectureStrength} = req.body
-    
-    // console.log(req.body)
 
+    /* Invalid Date check */
+    
     const currentDateTime = new Date()
     const dateTime = new Date(date+" "+time)
 
-    // if(dateTime < currentDateTime)
-    // {
-    //     return res.status(400).json({
-    //         error:"Invalid Date or time"
-    //     })
-    // }
+    /* 
+        dateTime       - startTime of lecture 
+        endingDateTime - endTime of lecture
+    */
 
-    var day = new Date(date).getDay();
+    if(dateTime < currentDateTime)
+    {
+        return res.status(400).json({
+            error:"Invalid Date or time"
+        })
+    }
 
-    day = day - 1;
-    day = (day+7)%7;
+    /* Calculating endingTime of lecture */
 
     var [hh,mm] = time.split(":")           // hh - hour ; mm - minutes
 
@@ -41,68 +115,32 @@ const createExtraClass = async (req,res)=>{
     durationHH = parseInt(durationHH);
     durationMM = parseInt(durationMM);
 
-    var minutesToAdd=durationHH*60+durationMM;
-    var startTime = new Date("01-01-1970 "+hh+":"+mm);
-    var endingTime = new Date(startTime.getTime() + minutesToAdd*60000);
+    var minutesToAdd = durationHH*60+durationMM;
+    var startTime    = new Date("01-01-1970 "+hh+":"+mm);
+    var endingTime   = new Date(startTime.getTime() + minutesToAdd*60000);
 
     var ehh = endingTime.getHours().toString();
     var emm = endingTime.getMinutes().toString();
 
     const endingDateTime = new Date(date+" "+ehh+":"+emm);
-    console.log(endingDateTime)
 
-    // console.log(endingTime.getHours(), endingTime.getMinutes())
+    /* first check conflict with timetable or other extra lectures before creating one*/
 
-    startTimeOfExtraLecture = hh;
-    endTimeOfExtraLecture = endingTime.getMinutes()?endingTime.getHours()+1:endingTime.getHours();
-
-    console.log(startTimeOfExtraLecture,endTimeOfExtraLecture);
-
-    const response = await TimeTable.findOne({batch});
-    
-    // console.log(response.timetable)
-
-    // console.log(day)
-
-    var timetable = response.timetable[day];
-
-    // console.log(timetable)
-
-    flag = false;
-
-    timetable.forEach(lecture=>{
-        var startTimeOfLecture = lecture.time + 7;
-        var endTimeOfLecture = lecture.time + 8;
-
-        if((startTimeOfExtraLecture>=startTimeOfLecture && endTimeOfExtraLecture<=endTimeOfLecture) ||
-           (startTimeOfExtraLecture<=startTimeOfLecture && endTimeOfExtraLecture>=endTimeOfLecture))
-        {
-            flag = true;
-        }
-    })
-
-    // checking conflicts with other extra lectures
-    const results = await ExtraClass.find({
-        batch,
-        // $or:[
-        //    {$and:[{dateTime:{$gte:dateTime}},{endingDateTime:{$lte:endingDateTime}}]},
-        //    {$and:[{dateTime:{$lte:dateTime}},{endingDateTime:{gte:endingDateTime}}]}
-        // ]
-    })
-
-    if(flag || results)
+    if(await conflictCheck(date,time,duration,batch) === 1)
     {
         return res.status(400).json({
-            error:"Lecture already scheduled at selected time interval. Choose a different time slot."
-        })
+                error:"Lecture already scheduled at selected time interval. Choose a different time slot."
+            })
     }
+
+    /* Create extra lecture */
 
     const save = await ExtraClass.create({
         batch,
         time,
         duration,
         date,
-        dateTime,
+        dateTime,               
         endingDateTime,
         teacherID,
         teacherName,
@@ -123,7 +161,6 @@ const createExtraClass = async (req,res)=>{
             error:"Error creating extra class"
         })
     }
-
 }
 
 const updateExtraClass = async (req,res)=>{
@@ -138,8 +175,54 @@ const updateExtraClass = async (req,res)=>{
         vaccinationStatus,
         lectureStrength,
         _id} = req.body
+
     
-    // console.log(req.body)
+    /* Invalid Date check */
+    
+    const currentDateTime = new Date()
+    const dateTime = new Date(date+" "+time)
+
+    /* 
+        dateTime       - startTime of lecture 
+        endingDateTime - endTime of lecture
+    */
+
+    if(dateTime < currentDateTime)
+    {
+        return res.status(400).json({
+            error:"Invalid Date or time"
+        })
+    }
+
+    /* Calculating endingTime of lecture */
+
+    var [hh,mm] = time.split(":")           // hh - hour ; mm - minutes
+
+    var [durationHH,durationMM] = duration.split(":")
+
+    hh = parseInt(hh);
+    mm = parseInt(mm);
+    durationHH = parseInt(durationHH);
+    durationMM = parseInt(durationMM);
+
+    var minutesToAdd = durationHH*60+durationMM;
+    var startTime    = new Date("01-01-1970 "+hh+":"+mm);
+    var endingTime   = new Date(startTime.getTime() + minutesToAdd*60000);
+
+    var ehh = endingTime.getHours().toString();
+    var emm = endingTime.getMinutes().toString();
+
+    const endingDateTime = new Date(date+" "+ehh+":"+emm);
+
+    /* first check conflict with timetable or other extra lectures before creating one*/
+
+    if(await conflictCheck(date,time,duration,batch,_id) === 1)
+    {
+        return res.status(400).json({
+                error:"Lecture already scheduled at selected time interval. Choose a different time slot."
+            })
+    }
+    
 
     const update = await ExtraClass.updateOne({
         _id
@@ -148,6 +231,8 @@ const updateExtraClass = async (req,res)=>{
         time,
         duration,
         date,
+        dateTime,
+        endingDateTime,
         teacherID,
         teacherName,
         preference,
@@ -172,8 +257,6 @@ const deleteExtraClass = async (req,res)=>{
     const {_id} = req.body
 
     const response = await ExtraClass.deleteOne({_id});
-
-    // console.log(response);
 
     if(response.deletedCount > 0)
     {
