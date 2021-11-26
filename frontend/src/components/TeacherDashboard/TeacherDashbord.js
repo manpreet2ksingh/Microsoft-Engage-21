@@ -35,11 +35,11 @@ const TeacherDashboard = ()=>{
     const getUpcomingExtraLectures = async () =>{
         await upcomingExtraLecturesByTeacherID(teacherID)
         .then(data=>{
-            if(data.error){
+            if(data && data.error){
                 console.log(data.error)
             }
             else{
-                console.log(data)
+                // console.log(data)
                 setExtraLectures(data)
             }
         })

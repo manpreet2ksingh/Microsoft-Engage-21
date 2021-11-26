@@ -1,11 +1,8 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState} from 'react'
 import Header from '../Navbar/Navbar'
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button'
-import {Row,Col} from 'react-bootstrap'
-import {Alert} from 'react-bootstrap'
-
 import {updateVaccinationStatus} from '../API/api'
 
 const VaccinationStatusUpdate = ()=>{

@@ -50,7 +50,7 @@ const ExtraClass = (props)=>{
         .then(res=>{
             if(res.error)
             {
-                setResponse("Error occured")
+                setResponse(res)
             }
             else
             {
@@ -69,7 +69,7 @@ const ExtraClass = (props)=>{
         .then(res=>{
             if(res.error)
             {
-                setResponse("error")
+                setResponse(res)
             }
             else
             {
@@ -79,9 +79,9 @@ const ExtraClass = (props)=>{
     }
 
     const displayResponse=()=>{
-        if(response === "Error occured"){
+        if(response.error){
             return <Alert  className="d-flex justify-content-center" variant="danger">
-                        {`Error scheduling lecture`}
+                        {response.error}
                     </Alert>
         }
         else if(response !== "")

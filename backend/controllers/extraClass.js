@@ -275,12 +275,73 @@ const getExtraClassesListByBatch = async (req,res)=>{
     console.log(batch)
     const list = await ExtraClass.find({
         batch,
-        "dateTime":{
+        "endingDateTime":{
             $gte:new Date()
         }
     })
+    .sort({dateTime:1})
 
     return res.json(list);
+}
+
+const slotCheck = async (req,res)=>{
+    const {_id} = req.body;
+
+    const temp = await ExtraClass.findById({_id})
+
+    if(temp.registered >= temp.lectureStrength)
+    {
+        return res.status(400).json({
+            error:"No slot left"
+        })
+    }
+    return res.json({
+        success:"Slots remaining"
+    })
+}
+
+const serveRequest = async (req,res)=>{
+    const {_id,studentID,studentName} = req.body;      // _id - extraLecture id
+    var studentData = {studentID,studentName}
+
+    const result = await ExtraClass.updateOne({_id},{
+        $inc:{
+            registered:1
+        },
+        $push:{
+            listOfStudents:studentData
+        }
+    })
+    if(result.modifiedCount > 0){
+        return res.status(200).json({
+            success:"Requested submitted"
+        })
+    }
+    return res.status(400).json({
+        error:"Request failed"
+    })
+}
+
+const deleteRequest = async (req,res)=>{
+    const {_id,studentID,studentName} = req.body;      // _id - extraLecture id
+    var studentData = {studentID,studentName}
+
+    const result = await ExtraClass.updateOne({_id},{
+        $inc:{
+            registered:-1
+        },
+        $pull:{
+            listOfStudents:studentData
+        }
+    })
+    if(result.modifiedCount > 0){
+        return res.status(200).json({
+            success:"Requested submitted"
+        })
+    }
+    return res.status(400).json({
+        error:"Request failed"
+    })
 }
 
 const getExtraClassesListByTeacherID = async (req,res)=>{
@@ -289,10 +350,11 @@ const getExtraClassesListByTeacherID = async (req,res)=>{
     console.log(teacherID)
     const list = await ExtraClass.find({
         teacherID,
-        "dateTime":{
+        "endingDateTime":{
             $gte:new Date()
         }
     })
+    .sort({dateTime:1})
 
     return res.json(list);
 }
@@ -301,4 +363,8 @@ module.exports = {createExtraClass,
                   updateExtraClass,
                   deleteExtraClass,
                   getExtraClassesListByBatch,
-                  getExtraClassesListByTeacherID}
+                  getExtraClassesListByTeacherID,
+                  serveRequest,
+                  deleteRequest,
+                  slotCheck}
+                  

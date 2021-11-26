@@ -13,7 +13,7 @@ const TimetableLayout = ()=>{
     var dayOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"]
 
     const getTimeTable = async ()=>{
-        if(userInfo.role == 0)
+        if(userInfo.role === 0)
         {
             await TimeTable(userInfo.batch)
             .then(data=>{
@@ -45,7 +45,7 @@ const TimetableLayout = ()=>{
 
     useEffect(()=>{
         getTimeTable();
-    },[])
+    })
 
     return(
         <div style={{backgroundColor:'rgba(248, 245, 245, 0.945)'}}>

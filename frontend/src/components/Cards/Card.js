@@ -9,7 +9,7 @@ const LectureCard = ({schedule,index,handler=0,extra=0})=>{
  
     day = day - 1;
     
-    console.log(day);
+    // console.log(day);
 
     // console.log(schedule)
     // handler - to identify whether student has logged in or teacher
@@ -21,7 +21,7 @@ const LectureCard = ({schedule,index,handler=0,extra=0})=>{
     const updateStudentStatus = async ()=>{
         var studentID = ID;
         const {time} = schedule;
-        console.log(studentID,batch,time,day)
+        // console.log(studentID,batch,time,day)
         await getStudentLectureStatus({batch,time,studentID,day})
         .then(res=>{
             if(res.error)
@@ -30,7 +30,7 @@ const LectureCard = ({schedule,index,handler=0,extra=0})=>{
             }
             else
             {
-                console.log(res)
+                // console.log(res)
                 setStatus(res)
             }
         })
@@ -40,13 +40,13 @@ const LectureCard = ({schedule,index,handler=0,extra=0})=>{
         const {batch,time} = schedule;
         await getTeacherLectureStatus({batch,time,day})
         .then(res=>{
-            if(res.error)
+            if(res && res.error)
             {
                 console.log(res.error)
             }
             else
             {
-                console.log(res)
+                // console.log(res)
                 setStatus(res)
             }
         })

@@ -26,8 +26,9 @@ const extraClassSchema = mongoose.Schema(
     subject:{
         type:String
     },
-    day:{
-        type:Number
+    registered:{            // count of submitted requests
+        type:Number,
+        default:0
     },
     dateTime:{
         type:Date
@@ -40,7 +41,11 @@ const extraClassSchema = mongoose.Schema(
     },
     lectureStrength:{
         type:Number
+    },
+    listOfStudents:{      // shortlisted students for offline mode
+        type:Array
     }
+        
   },
   {
     timestamps: true,

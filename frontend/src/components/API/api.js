@@ -172,6 +172,48 @@ export const createExtraClass = async (data)=>{
     })
 }
 
+export const serveRequest = async (data)=>{
+    return await fetch(`http://localhost:8000/api/extraClass/serveRequest`,{
+        method:'POST',
+        headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res=>{
+        return res.json()
+    })
+}
+
+export const deleteRequest = async (data)=>{
+    return await fetch(`http://localhost:8000/api/extraClass/deleteRequest`,{
+        method:'POST',
+        headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res=>{
+        return res.json()
+    })
+}
+
+export const slotCheck = async (data)=>{
+    return await fetch(`http://localhost:8000/api/extraClass/slotCheck`,{
+        method:'POST',
+        headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res=>{
+        return res.json()
+    })
+}
+
 export const upcomingExtraLectures = async (batch)=>{
     return await fetch(`http://localhost:8000/api/extraClass/student/${batch}/get`,{
         method:"GET"

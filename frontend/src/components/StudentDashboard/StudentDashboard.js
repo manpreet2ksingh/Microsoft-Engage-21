@@ -17,7 +17,7 @@ const StudentDashboard = ()=>{
 
     const batch = JSON.parse(localStorage.getItem('userInfo')).batch; /* parsing string to JSON to extract batch */
 
-    console.log("today ",day)
+    // console.log("today ",day)
 
     /*fetching timetable */
     const getSchedule = async ()=>{
@@ -28,7 +28,7 @@ const StudentDashboard = ()=>{
                 console.log(data.error)
             }
             else{
-                console.log(data.timetable[day])
+                // console.log(data.timetable[day])
                 setSchedule(data.timetable[day]);
             }
         })

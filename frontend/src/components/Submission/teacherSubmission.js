@@ -62,7 +62,7 @@ const TeacherPreference = ()=>{
         
         currentTime > deadlineToSubmitPreference && setDeadline(true)
             
-    })
+    },[])
 
     const deadlinePassed = ()=>{
 
