@@ -31,3 +31,8 @@ var futureDate = new Date(currentDate.getTime() + minutesToAdd*60000);
 console.log(typeof currentDate)
 
 console.log(futureDate.getHours(), futureDate.getMinutes())
+
+var todaysDate= new Date()
+ todaysDate = todaysDate.toISOString().split('T')[0]
+
+console.log("todays ",todaysDate)

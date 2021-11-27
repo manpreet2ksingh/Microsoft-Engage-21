@@ -5,7 +5,7 @@ import LectureCard from '../Cards/Card';
 import ExtraLectureCard from '../Cards/ExtraLectureCard';
 import './styles.css'
 
-import { TimeTable,upcomingExtraLectures } from '../API/api' 
+import { TimeTable,upcomingStudentsExtraLecturesByDate } from '../API/api' 
 
 const StudentDashboard = ()=>{
 
@@ -35,7 +35,7 @@ const StudentDashboard = ()=>{
     }
 
     const getUpcomingExtraLectures = async () =>{
-        await upcomingExtraLectures(batch)
+        await upcomingStudentsExtraLecturesByDate(batch)
         .then(data=>{
             if(data.error){
                 console.log(data.error)
@@ -49,7 +49,7 @@ const StudentDashboard = ()=>{
     const weekend = ()=>{
         return <Alert  className="d-flex justify-content-center" variant="success">
                     <Alert.Heading>
-                        It's Weekend. Enjoy!
+                        It's Weekend!
                     </Alert.Heading>
                 </Alert>
     }
@@ -71,11 +71,11 @@ const StudentDashboard = ()=>{
                 </div>
 
                     <h3>
-                        Upcoming Extra Lectures
+                        Extra Lectures
                     </h3>
 
                 <div className="container">
-                    {(day===5 || day===6)?weekend():extraLectures && extraLectures.length > 0 ?
+                    {extraLectures && extraLectures.length > 0 ?
                         extraLectures.map((lectureData,i)=>(
                             <ExtraLectureCard data={lectureData} key={i} index={++i} />
                         )):

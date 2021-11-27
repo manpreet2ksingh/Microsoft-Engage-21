@@ -284,6 +284,36 @@ const getExtraClassesListByBatch = async (req,res)=>{
     return res.json(list);
 }
 
+const getStudentsExtraClassesListByDate = async (req,res)=>{
+    const batch = req.params.batch
+    var todaysDate= new Date()
+    todaysDate = todaysDate.toISOString().split('T')[0]
+
+    const list = await ExtraClass.find({
+        batch,
+        "date":todaysDate
+    })
+    .sort({dateTime:1})
+
+    return res.json(list);
+}
+
+const getTeachersExtraClassesListByDate = async (req,res)=>{
+
+    const teacherID = req.params.teacherID
+
+    var todaysDate= new Date()
+    todaysDate = todaysDate.toISOString().split('T')[0]
+
+    const list = await ExtraClass.find({
+        teacherID,
+        "date":todaysDate
+    })
+    .sort({dateTime:1})
+
+    return res.json(list);
+}
+
 const slotCheck = async (req,res)=>{
     const {_id} = req.body;
 
@@ -347,7 +377,7 @@ const deleteRequest = async (req,res)=>{
 const getExtraClassesListByTeacherID = async (req,res)=>{
     const teacherID = req.params.teacherID
 
-    console.log(teacherID)
+    // console.log(teacherID)
     const list = await ExtraClass.find({
         teacherID,
         "endingDateTime":{
@@ -364,6 +394,8 @@ module.exports = {createExtraClass,
                   deleteExtraClass,
                   getExtraClassesListByBatch,
                   getExtraClassesListByTeacherID,
+                  getStudentsExtraClassesListByDate,
+                  getTeachersExtraClassesListByDate,
                   serveRequest,
                   deleteRequest,
                   slotCheck}

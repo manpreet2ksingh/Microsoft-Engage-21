@@ -55,6 +55,11 @@ function Header() {
 							Schedule an extra lecture
 					</Nav.Link>
 			}
+
+						<Nav.Link href="/upcomingExtraLectures">
+								Upcoming extra lectures
+						</Nav.Link>
+
 					
 					<NavDropdown className="ml-auto"  title={`Welcome ${userInfo.name}`}>
 						<Nav.Item className="ml-auto">

@@ -236,6 +236,28 @@ export const upcomingExtraLecturesByTeacherID = async (teacherID)=>{
     })
 }
 
+export const upcomingStudentsExtraLecturesByDate = async (batch)=>{
+    return await fetch(`http://localhost:8000/api/extraClass/todaysExtraLectures/${batch}`,{
+        method:"GET"
+    }).then(res=>{
+        return res.json()
+    })
+    .catch(error=>{
+        console.log(error)
+    })
+}
+
+export const upcomingTeachersExtraLecturesByDate = async (teacherID)=>{
+    return await fetch(`http://localhost:8000/api/extraClass/todaysExtraLectures/teacher/${teacherID}`,{
+        method:"GET"
+    }).then(res=>{
+        return res.json()
+    })
+    .catch(error=>{
+        console.log(error)
+    })
+}
+
 export const deleteExtraClass = async (data)=>{
     return await fetch(`http://localhost:8000/api/extraClass/delete`,{
         method:'POST',
