@@ -1,5 +1,8 @@
 # Microsoft-Engage-21
 
+Description:
+Track **N** Plan – Platform that helps students and teachers plan and keep track of their schedule in the hybrid working environment.
+
 - Choose Login as Student/Teacher
 ![Screenshot (38)](https://user-images.githubusercontent.com/43861933/143775909-3edccd0f-4b6c-4d3f-abab-a3bc0455e07b.png)
 
