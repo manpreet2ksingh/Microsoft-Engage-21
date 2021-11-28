@@ -4,7 +4,8 @@ Description:
 Track **N** Plan – Platform that helps students and teachers plan and keep track of their schedule in the hybrid working environment.
 
 Activity Diagram - Schedule an extra lecture
-        ![Blank diagram](https://user-images.githubusercontent.com/43861933/143781028-9d830b35-841b-4d1b-b40c-8a6b59eb2a41.png)
+
+![Blank diagram](https://user-images.githubusercontent.com/43861933/143781028-9d830b35-841b-4d1b-b40c-8a6b59eb2a41.png)
 
 - Choose Login as Student/Teacher
 ![Screenshot (38)](https://user-images.githubusercontent.com/43861933/143775909-3edccd0f-4b6c-4d3f-abab-a3bc0455e07b.png)
