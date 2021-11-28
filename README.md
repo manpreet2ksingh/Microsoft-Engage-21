@@ -3,6 +3,10 @@
 Description:
 Track **N** Plan – Platform that helps students and teachers plan and keep track of their schedule in the hybrid working environment.
 
+Activity Diagram - for Lectures according to timetable
+
+![Blank diagram (1)](https://user-images.githubusercontent.com/43861933/143781267-dbec0c7f-d1bb-490c-a0e9-92c586b9ce9b.png)
+
 Activity Diagram - Schedule an extra lecture
 
 ![Blank diagram](https://user-images.githubusercontent.com/43861933/143781028-9d830b35-841b-4d1b-b40c-8a6b59eb2a41.png)
