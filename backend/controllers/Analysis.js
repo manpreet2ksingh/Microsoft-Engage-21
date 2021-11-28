@@ -5,12 +5,12 @@ exports.analysis = async (req,res)=>{
     const currentTime = new Date("01-01-1970");
     const timeAfterWhichAnalysisWillBeShown = new Date("1-01-1970 18:00:00");
 
-    if(currentTime < timeAfterWhichAnalysisWillBeShown)
-    {
-        return res.status(200).json({
-            result:"Analysis will be here after 6 PM"
-        })
-    }
+    // if(currentTime < timeAfterWhichAnalysisWillBeShown)
+    // {
+    //     return res.status(200).json({
+    //         result:"Analysis will be here after 6 PM"
+    //     })
+    // }
 
     const {batch,time,day} = req.body;
 

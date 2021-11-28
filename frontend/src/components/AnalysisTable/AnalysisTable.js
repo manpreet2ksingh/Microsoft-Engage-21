@@ -26,19 +26,27 @@ const AnalysisTable = (props)=>{
         var temp = new Map()  // mapping studentID to vaccination status
         await getStudentsData(batch)
         .then(res=>{
-            // console.log(res)
-            res.forEach(data=>{
-                temp.set(data.ID,data.vaccinationStatus)
-            })
-            // console.log(temp)
-            setStudentData(temp);
+            console.log(res)
+
+            if(res.error)
+            {
+                console.log(res.error)
+            }
+            else{
+                res.forEach(data=>{
+                    temp.set(data.ID,data.vaccinationStatus)
+                })
+                // console.log(temp)
+                setStudentData(temp);
+            }
+            
         })
     }
 
     const Analysis = async ()=>{
         await getAnalysis({time,batch,day})
         .then(res=>{
-            // console.log(res)
+            console.log(res)
             setAnalysis(res)
         })
     }
