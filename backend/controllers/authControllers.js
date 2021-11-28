@@ -65,6 +65,7 @@ const authenticateUser = async (req,res)=>{
             email:user.email,
             batch:user.batch,
             role:user.role,
+            vaccinationStatus:user.vaccinationStatus,
             token:generateToken(user._id)
         })
     }

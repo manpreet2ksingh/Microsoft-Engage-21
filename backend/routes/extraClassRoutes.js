@@ -8,7 +8,7 @@ const {createExtraClass,
        getExtraClassesListByTeacherID,
        getStudentsExtraClassesListByDate,
        getTeachersExtraClassesListByDate,
-       serveRequest,deleteRequest, slotCheck} = require('../controllers/extraClass')
+       serveRequest,deleteRequest, slotCheck,studentsList} = require('../controllers/extraClass')
 
 router.post('/create',createExtraClass);
 router.post('/update',updateExtraClass);
@@ -20,5 +20,6 @@ router.get('/student/:batch/get',getExtraClassesListByBatch);
 router.get('/teacher/:teacherID/get',getExtraClassesListByTeacherID);
 router.get('/todaysExtraLectures/:batch',getStudentsExtraClassesListByDate);
 router.get('/todaysExtraLectures/teacher/:teacherID',getTeachersExtraClassesListByDate);
+router.post('/getStudentsList',studentsList);
 
 module.exports = router

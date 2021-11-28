@@ -36,9 +36,8 @@ const userSchema = mongoose.Schema(
         required:true,
         default:"Not vaccinated"
     },
-    vaccinationCertificate:{
-        data:Buffer,
-        contentType:String
+    vaccinationCertificateLink:{
+        type:String
     }
   },
   {

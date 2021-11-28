@@ -38,7 +38,7 @@ const TeacherTemplate = ({lecture,map,updateResponse})=>{
                                 day})
             .then(res=>{
                 if(res.error){
-                    console.log("Error submitting response")
+                    // console.log("Error submitting response")
                     updateResponse(res.error)
                 }
                 else{
@@ -50,7 +50,7 @@ const TeacherTemplate = ({lecture,map,updateResponse})=>{
 
     const handleUpdate = async (e)=>{
         e.preventDefault();
-        console.log(preferences)
+        // console.log(preferences)
         await updatePreference({modeOfPreference,
                                 time,
                                 batch,
@@ -59,7 +59,7 @@ const TeacherTemplate = ({lecture,map,updateResponse})=>{
                                 day})
             .then(res=>{
                 if(res.error){
-                    console.log("Error updating response")
+                    // console.log("Error updating response")
                     updateResponse(res.error)
                 }
                 else{
@@ -82,7 +82,7 @@ const TeacherTemplate = ({lecture,map,updateResponse})=>{
                         day:day
                     }
                 }
-                }> View analysis </Link>
+                }> Students responses </Link>
             </div>
             <div className="course-info">
                 <h6>{map[time]}</h6>

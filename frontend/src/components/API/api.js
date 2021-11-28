@@ -286,10 +286,28 @@ export const updateExtraClass = async (data)=>{
     })
 }
 
+export const studentsList = async (data)=>{
+    return await fetch(`http://localhost:8000/api/extraClass/getStudentsList`,{
+        method:'POST',
+        headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res=>{
+        return res.json()
+    })
+}
+
 export const updateVaccinationStatus = async (data)=>{
     return await fetch(`http://localhost:8000/api/user/updateVaccinationStatus`,{
         method:'POST',
-        body: data
+        headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(data)
     })
     .then(res=>{
         return res.json()

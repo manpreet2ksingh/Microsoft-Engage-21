@@ -40,7 +40,7 @@ const ExtraClass = (props)=>{
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        console.log(values)
+        // console.log(values)
 
         var data = values;
         data.teacherID = userInfo.ID

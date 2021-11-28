@@ -45,7 +45,7 @@ const conflictCheck = async (date,time,duration,batch,_id)=>{
         var startTimeOfLecture = lecture.time + 7;
         var endTimeOfLecture = lecture.time + 8;
 
-        if((startTimeOfExtraLecture>=startTimeOfLecture && endTimeOfExtraLecture<=endTimeOfLecture) ||
+        if((startTimeOfExtraLecture>=startTimeOfLecture && endTimeOfExtraLecture<endTimeOfLecture) ||
            (startTimeOfExtraLecture<=startTimeOfLecture && endTimeOfExtraLecture>=endTimeOfLecture))
         {
             flag = true;
@@ -61,7 +61,7 @@ const conflictCheck = async (date,time,duration,batch,_id)=>{
         batch,
         _id:{$ne:_id},          /* excluding the one to be updated ; only in update case */
         $or:[
-           { $and: [{dateTime:{$gte:new Date(start)}},{endingDateTime:{$lte:new Date(end)}}]},
+           { $and: [{dateTime:{$gte:new Date(start)}},{endingDateTime:{$lt:new Date(end)}}]},
            { $and: [{dateTime:{$lte:new Date(start)}},{endingDateTime:{$gte:new Date(end)}}]}
         ]
     })
@@ -96,7 +96,8 @@ const createExtraClass = async (req,res)=>{
         dateTime       - startTime of lecture 
         endingDateTime - endTime of lecture
     */
-
+    
+    // console.log(currentDateTime)
     if(dateTime < currentDateTime)
     {
         return res.status(400).json({
@@ -223,6 +224,7 @@ const updateExtraClass = async (req,res)=>{
             })
     }
     
+    // console.log(endingDateTime)
 
     const update = await ExtraClass.updateOne({
         _id
@@ -272,7 +274,7 @@ const deleteExtraClass = async (req,res)=>{
 const getExtraClassesListByBatch = async (req,res)=>{
     const batch = req.params.batch
 
-    console.log(batch)
+    // console.log(batch)
     const list = await ExtraClass.find({
         batch,
         "endingDateTime":{
@@ -286,12 +288,10 @@ const getExtraClassesListByBatch = async (req,res)=>{
 
 const getStudentsExtraClassesListByDate = async (req,res)=>{
     const batch = req.params.batch
-    var todaysDate= new Date()
-    todaysDate = todaysDate.toISOString().split('T')[0]
-
+   
     const list = await ExtraClass.find({
         batch,
-        "date":todaysDate
+        "date":new Date().toISOString().split('T')[0]
     })
     .sort({dateTime:1})
 
@@ -305,9 +305,11 @@ const getTeachersExtraClassesListByDate = async (req,res)=>{
     var todaysDate= new Date()
     todaysDate = todaysDate.toISOString().split('T')[0]
 
+    console.log(todaysDate)
+
     const list = await ExtraClass.find({
         teacherID,
-        "date":todaysDate
+        "date":new Date().toISOString().split('T')[0]
     })
     .sort({dateTime:1})
 
@@ -349,6 +351,20 @@ const serveRequest = async (req,res)=>{
     }
     return res.status(400).json({
         error:"Request failed"
+    })
+}
+
+const studentsList = async (req,res)=>{
+    const {_id} = req.body;      // _id - extraLecture id
+    
+    const result = await ExtraClass.findById(_id)
+    
+    if(result)
+    {
+        return res.status(200).json(result.listOfStudents)
+    }
+    return res.status(400).json({
+        error:"Error getting results"
     })
 }
 
@@ -398,5 +414,6 @@ module.exports = {createExtraClass,
                   getTeachersExtraClassesListByDate,
                   serveRequest,
                   deleteRequest,
-                  slotCheck}
+                  slotCheck,
+                  studentsList}
                   

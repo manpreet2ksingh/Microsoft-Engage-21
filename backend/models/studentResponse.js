@@ -14,7 +14,7 @@ const studentResponseSchema = mongoose.Schema(
     },
     preference:{
         type:String,
-        default:"NA"   // NA-not available/interested
+        default:"NA"   // NA-not available/not interested
     },
     subject:{
         type:String
@@ -25,7 +25,7 @@ const studentResponseSchema = mongoose.Schema(
     studentName:{
         type:String
     },
-    day:{
+    day:{               // 1-Monday; 2-Tuesday;..
         type:Number
     },
     vaccinationStatus:{

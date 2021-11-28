@@ -61,7 +61,7 @@ const Template = ({lecture,map,userInfo,day,updateResponse})=>{
                 console.log(res);
             }
         })
-        updateResponse(`Preference for ${subject} lecture has been updated`);
+        updateResponse(`Preference for ${subject.toUpperCase()} lecture has been updated`);
     }
 
     const displayLectureDetails = ()=>(

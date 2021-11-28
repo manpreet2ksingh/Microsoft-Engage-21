@@ -10,7 +10,7 @@ const TimeTableSchema = mongoose.Schema({
             {
                 _id: false,
                 time:{
-                    type:Number   // 1 represents 8am-9am ;...; 10 represents 5pm-6pm 
+                    type:Number   // 1 represents 8am-9am ;2 represents 9am-10am ...
                 },
                 subject:{
                     type:String

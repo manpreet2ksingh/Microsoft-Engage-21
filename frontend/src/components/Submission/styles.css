@@ -6,7 +6,7 @@
 
 
 #container-body {
-	background-image: linear-gradient(45deg, #7175da, #9790F2);
+	background-color: rgb(211, 209, 212);
 	font-family: 'Muli', sans-serif;
 	display: flex;
 	align-items: center;
@@ -17,7 +17,7 @@
 }
 
 #container{
-	color: #0c0847;
+	color: black;
 }
 
 #container h2{
@@ -25,7 +25,7 @@
 }
 
 #container h6{
-	color: white;
+	color: black;
 	text-align: center;
 }
 
@@ -47,7 +47,7 @@
 }
 
 .course-preview {
-	background-color: #2A265F;
+	background-color: #171718;
 	color: #fff;
 	padding: 30px 30px 30px 30px;
 	width: 310px;
@@ -124,11 +124,11 @@ input[type=number] {
 }
 
 .submitButton {
-	background-color: #2A265F;
+	background-color: rgb(180, 177, 177);
 	border: 0;
 	border-radius: 50px;
 	box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-	color: #fff;
+	color: black;
 	font-size: 14px;
 	padding: 12px 25px;
 	bottom: 30px;
@@ -137,6 +137,8 @@ input[type=number] {
 	margin-top:20px;
 	margin-bottom: 2px;
 	margin-left: 14px;
+	font-weight: 600;
+	font-size: 15px;
 	align-items: center;
 }
 

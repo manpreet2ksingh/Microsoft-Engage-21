@@ -11,6 +11,7 @@ const StudentDashboard = ()=>{
 
     const [schedule,setSchedule] = useState([])
     const [extraLectures,setExtraLectures] = useState()
+    const [response,setResponse] = useState();
 
     var day = new Date().getDay()-1;  // returns as Sunday-0,Monday-1,Tuesday-2,Wednesday-3,Thursday-4,Friday-5,Saturday-6
     day = (day+7)%7;  // converting to 0-Monday,1-Tuesday,... as per timetable array
@@ -46,10 +47,21 @@ const StudentDashboard = ()=>{
         })
     }
 
+    const displayResponse=()=>{
+        return <Alert  className="d-flex justify-content-center" variant="danger">
+                    {response}
+                </Alert>
+        
+    }
+
+    const updateResponse = (res)=>{
+        setResponse(res)
+    }
+
     const weekend = ()=>{
         return <Alert  className="d-flex justify-content-center" variant="success">
                     <Alert.Heading>
-                        It's Weekend!
+                        It's Weekend
                     </Alert.Heading>
                 </Alert>
     }
@@ -74,12 +86,23 @@ const StudentDashboard = ()=>{
                         Extra Lectures
                     </h3>
 
+                    {
+                        response && 
+                        <div className="container">
+                            {displayResponse()}
+                        </div>
+                    }
+  
                 <div className="container">
                     {extraLectures && extraLectures.length > 0 ?
                         extraLectures.map((lectureData,i)=>(
-                            <ExtraLectureCard data={lectureData} key={i} index={++i} />
+                            <ExtraLectureCard data={lectureData} 
+                                              key={i} 
+                                              index={++i}
+                                              updateResponse={updateResponse} 
+                            />
                         )):
-                        <h4>No upcoming extra lectures!</h4> 
+                        <h4>No extra lectures today</h4> 
                      }
                 </div>
             </div>

@@ -161,6 +161,8 @@ exports.updateTeacherPreference = async (req,res)=>{
         }
     })
 
+    console.log(update)
+
     if(update.modifiedCount > 0)
     {
         if(modeOfPreference === 'Online' || modeOfPreference === 'NA')

@@ -9,7 +9,6 @@ const fileUpload = require('express-fileupload');
 const userRoutes = require('./routes/userRoutes')
 const authRoutes = require('./routes/authRoutes')
 const timeTableRoutes = require('./routes/timeTableRoutes')
-const testRoutes = require('./routes/test')
 const studentRoutes = require('./routes/studentRoutes')
 const dataRoutes = require('./routes/studentsPreferenceRoutes')
 const teacherRoutes = require('./routes/teacherRoutes')
@@ -40,7 +39,6 @@ app.use('/api/teacher',teacherRoutes);
 app.use('/api/extraClass',extraClassRoutes);
 
 app.use('/api',dataRoutes);
-app.use('/api',testRoutes);
 
 app.listen(PORT,()=>{
     console.log(`Server is up and running on PORT ${PORT}`);

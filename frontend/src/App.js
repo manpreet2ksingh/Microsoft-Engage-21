@@ -13,8 +13,10 @@ import List from './components/OfflineStudentList/List';
 import ExtraClass from './components/ExtraClass/ExtraClass';
 import VaccinationStatusUpdate from './components/UpdateVaccinationStatus/UpdateVaccinationStatus'
 import ShowExtraLectures from './components/ExtraClass/ShowExtraLectures';
+import StudentsList from './components/AnalysisTable/StudentsList';
 
 import Test from './components/testing'
+
 
 const App = () => (
   <BrowserRouter>
@@ -31,6 +33,7 @@ const App = () => (
         <Route path="/extraLecture" component={ExtraClass} exact />
         <Route path="/upcomingExtraLectures" component={ShowExtraLectures} exact />
         <Route path="/updateVaccinationStatus" component={VaccinationStatusUpdate} exact />
+        <Route path="/studentsList" component={StudentsList} exact />
         <Route path="/list" component={List} exact />
         <Route path="/test" component={Test} exact />
     </Switch>

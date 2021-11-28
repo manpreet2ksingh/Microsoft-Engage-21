@@ -45,7 +45,7 @@ const TimetableLayout = ()=>{
 
     useEffect(()=>{
         getTimeTable();
-    })
+    },[])
 
     return(
         <div style={{backgroundColor:'rgba(248, 245, 245, 0.945)'}}>

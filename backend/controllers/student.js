@@ -2,15 +2,25 @@ const StudentResponse = require('../models/studentResponse');
 const User = require('../models/user')
 
 exports.updateVaccinationStatus = async (req,res)=>{
-    if (req.files === null) {
-        return res.status(400).json({ msg: 'No file uploaded' });
+    const {ID,role,vaccinationStatus,link} = req.body;
+    // console.log(req.body);
+
+    const result = await User.updateOne({ID,role},{
+        $set:{
+            "vaccinationStatus":vaccinationStatus,
+            "vaccinationCertificateLink":link
+        }
+    })
+
+    if(result.modifiedCount > 0)
+    {
+        return res.status(200).json({
+            success:"Vaccination status updated"
+        })
     }
-
-    // console.log(req.body)
-    // console.log(req.files)
-
-    console.log("HELLO ",req.body.vaccinationStatus)
-    return res.json("HELLO")
+    return res.status(400).json({
+        error:"Error updating vaccination status"
+    })
 }
 
 exports.getStudentByID = async (req,res,next,id)=>{

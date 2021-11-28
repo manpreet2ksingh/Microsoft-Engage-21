@@ -20,8 +20,6 @@ const StudentPreference = ()=>{
     map[9] = "16:00 - 17:00"
 
     var day = new Date().getDay();  //return as Sunday-0,Monday-1,Tuesday-2,Wednesday-3,Thursday-4,Friday-5,Saturday-6
-    
-    // day = 4; // for testing
 
     const deadlineToSubmitPreference = new Date("01-01-1970 18:00:00");  // i.e. 6pm
     
@@ -131,7 +129,7 @@ const StudentPreference = ()=>{
                 <h2>
                     Submit your preferences for tomorrow's lectures
                 </h2>
-                <h6>Deadline to submit/update preferences - 6 PM</h6>
+                <h6>Deadline to submit/update preferences - <b>6 PM</b></h6>
             </div>
             {
                 deadline?deadlinePassed():showLectures()

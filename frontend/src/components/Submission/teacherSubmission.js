@@ -20,8 +20,6 @@ const TeacherPreference = ()=>{
     map[9] = "16:00 - 17:00"
 
     var day = new Date().getDay();  //return as Sunday-0,Monday-1,Tuesday-2,Wednesday-3,Thursday-4,Friday-5,Saturday-6
-    
-    // day = 4; // for testing
 
     const deadlineToSubmitPreference = new Date("01-01-1970 23:30:00");  // i.e. 11pm
     const startTime = new Date("01-01-1970 18:00:00");
@@ -137,7 +135,7 @@ const TeacherPreference = ()=>{
                 <h2>
                     Submit your preferences for tomorrow's lectures
                 </h2>
-                <h6>Deadline to submit/update preferences - 11 PM</h6>
+                <h6>Deadline to submit/update preferences - <b>11 PM</b></h6>
             </div>
             {
                 start?notStarted():deadline?deadlinePassed():showLectures()

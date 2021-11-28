@@ -19,7 +19,7 @@ const teacherPreferenceSchema = mongoose.Schema(
         type:Number
     },
     vaccinationStatus:{
-        type:Number,             //0-Not vaccinated,1-partially vaccinated,2-fully vaccinated
+        type:Number,             //0-Not vaccinated; 1-partially vaccinated; 2-fully vaccinated
     }
   },
   {

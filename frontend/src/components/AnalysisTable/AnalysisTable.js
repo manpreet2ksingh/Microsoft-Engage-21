@@ -30,7 +30,7 @@ const AnalysisTable = (props)=>{
             res.forEach(data=>{
                 temp.set(data.ID,data.vaccinationStatus)
             })
-            console.log(temp)
+            // console.log(temp)
             setStudentData(temp);
         })
     }

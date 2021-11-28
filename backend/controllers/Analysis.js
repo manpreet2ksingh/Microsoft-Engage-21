@@ -2,9 +2,8 @@ const StudentResponse = require('../models/studentResponse')
 
 exports.analysis = async (req,res)=>{
 
-    var today = new Date();
-    const currentTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    const timeAfterWhichAnalysisWillBeShown = "12:00:30";
+    const currentTime = new Date("01-01-1970");
+    const timeAfterWhichAnalysisWillBeShown = new Date("1-01-1970 18:00:00");
 
     if(currentTime < timeAfterWhichAnalysisWillBeShown)
     {

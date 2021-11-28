@@ -22,7 +22,7 @@ function Header() {
 			 {userInfo ? (
               <>
 				   
-					<Navbar.Brand>Scheduler</Navbar.Brand>
+					<Navbar.Brand>Track<b>N</b>Plan</Navbar.Brand>
 
 					{(userInfo.role === 0)?
 						<Nav.Link href="/studentDashboard">
@@ -62,9 +62,6 @@ function Header() {
 
 					
 					<NavDropdown className="ml-auto"  title={`Welcome ${userInfo.name}`}>
-						<Nav.Item className="ml-auto">
-							<Nav.Link>Update profile</Nav.Link>
-						</Nav.Item>
 
 						<Nav.Item className="ml-auto">
 							<Nav.Link href="/updateVaccinationStatus">Update vaccination status</Nav.Link>
