@@ -5,11 +5,11 @@ Track **N** Plan – Platform that helps students and teachers plan and keep tra
 
 Activity Diagram - for Lectures according to timetable
 
-![Blank diagram (1)](https://user-images.githubusercontent.com/43861933/143781267-dbec0c7f-d1bb-490c-a0e9-92c586b9ce9b.png)
+![Blank diagram](https://user-images.githubusercontent.com/43861933/143861429-bc75cdde-1f81-47fd-9197-e46dd47e66d4.png)
 
 Activity Diagram - Schedule an extra lecture
 
-![Blank diagram](https://user-images.githubusercontent.com/43861933/143781028-9d830b35-841b-4d1b-b40c-8a6b59eb2a41.png)
+![Blank diagram (1)](https://user-images.githubusercontent.com/43861933/143863486-cbecfcb6-0a8e-4f87-8c8e-962061b61543.png)
 
 - Choose Login as Student/Teacher
 ![Screenshot (38)](https://user-images.githubusercontent.com/43861933/143775909-3edccd0f-4b6c-4d3f-abab-a3bc0455e07b.png)
